@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": "26.x"
+  },
   "dependencies": {
     "@types/three": "^0.187.0",
     "embla-carousel-react": "^8.6.0",
