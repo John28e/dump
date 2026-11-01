@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   title: "dump — Creative Direction & Athletic Production",
   description:
     "Creative direction and film production for movement, performance, and athleticism.",
-  metadataBase: new URL("https://dump.vercel.app"),
+  metadataBase: new URL("https://dump-pied.vercel.app"),
   alternates: {
     canonical: "/",
   },
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: "dump — Creative Direction & Athletic Production",
     description:
       "Creative direction and film production for movement, performance, and athleticism.",
-    url: "https://dump.vercel.app",
+    url: "https://dump-pied.vercel.app",
     siteName: "dump",
     locale: "en_US",
     type: "website",

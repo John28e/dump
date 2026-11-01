@@ -112,7 +112,7 @@ export const Header: React.FC = () => {
         aria-label={`${PLACEHOLDER_DATA.brand} — Home`}
         className="block w-header-logo-w transition-opacity duration-300 hover:opacity-80 select-none rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-current focus-visible:ring-offset-2 focus-visible:ring-offset-black"
       >
-        <span className="font-futura font-bold text-heading-lg tracking-tight uppercase inline-flex items-center gap-1.5">
+        <span className="font-futura font-bold text-heading-lg tracking-tight inline-flex items-center gap-1.5">
           <svg
             viewBox="0 0 16 16"
             className="w-3.5 h-3.5 fill-current inline-block flex-shrink-0"
@@ -121,7 +121,7 @@ export const Header: React.FC = () => {
             <rect width="7" height="7" x="1" y="1" />
             <rect width="7" height="7" x="8" y="8" />
           </svg>
-          <span>{PLACEHOLDER_DATA.brand}</span>
+          <span className="!lowercase">{PLACEHOLDER_DATA.brand}</span>
         </span>
       </a>
 

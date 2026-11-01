@@ -297,7 +297,7 @@ export const PLACEHOLDER_BTS: BtsCardItem[] = [
 ];
 
 export const PLACEHOLDER_DATA = {
-  brand: "[YOUR NAME]",
+  brand: "dump",
   hero: {
     tagline: "We offer creative direction &amp; production for athleticism.",
     hint: "Scroll Down",
@@ -343,17 +343,17 @@ export const PLACEHOLDER_DATA = {
   contact: {
     heading: "Available worldwide",
     address: {
-      line1: "STUDIO [YOUR NAME]",
+      line1: "STUDIO DUMP",
       line2: "404 ATHLETIC WAY, FLOOR 4",
       line3: "NEW YORK, NY 10001",
       country: "UNITED STATES",
     },
     // 4 email rows per Requirement 8
     emails: [
-      { label: "Commercial", email: "commercial@yourname.studio" },
-      { label: "Film", email: "film@yourname.studio" },
-      { label: "General", email: "general@yourname.studio" },
-      { label: "Invoicing", email: "invoicing@yourname.studio" },
+      { label: "Commercial", email: "commercial@dump.example" },
+      { label: "Film", email: "film@dump.example" },
+      { label: "General", email: "general@dump.example" },
+      { label: "Invoicing", email: "invoicing@dump.example" },
     ],
     socials: [
       { name: "Instagram", url: "#" },
@@ -362,8 +362,8 @@ export const PLACEHOLDER_DATA = {
     ],
   },
   footer: {
-    copyright: "© 2026 [YOUR NAME]. ALL RIGHTS RESERVED.",
-    email: "hello@yourname.studio",
-    credit: "Website by [YOUR NAME]",
+    copyright: "©dump 2026. ALL RIGHTS RESERVED.",
+    email: "hello@dump.example",
+    credit: "Website by dump",
   },
 };

@@ -6,10 +6,10 @@ import { useAppStore } from "@/lib/store";
 import { CopyEmail } from "./CopyEmail";
 
 const CONTACT_EMAILS = [
-  { label: "Commercial", email: "commercial@yourname.studio" },
-  { label: "Film", email: "film@yourname.studio" },
-  { label: "General", email: "general@yourname.studio" },
-  { label: "Invoicing", email: "invoicing@yourname.studio" },
+  { label: "Commercial", email: "commercial@dump.example" },
+  { label: "Film", email: "film@dump.example" },
+  { label: "General", email: "general@dump.example" },
+  { label: "Invoicing", email: "invoicing@dump.example" },
 ];
 
 export const ContactModal: React.FC = () => {
@@ -328,7 +328,7 @@ export const ContactModal: React.FC = () => {
             {/* Studio Address & Socials */}
             <div className="md:col-span-2 flex flex-col justify-between gap-6 text-left">
               <div className="text-body-md text-black leading-relaxed">
-                <p className="font-bold tracking-tight uppercase">STUDIO [YOUR NAME]</p>
+                <p className="font-bold tracking-tight uppercase">STUDIO DUMP</p>
                 <p>404 ATHLETIC WAY, FLOOR 4</p>
                 <p>NEW YORK, NY 10001</p>
                 <p className="font-bold text-xs text-gray-500 mt-1 uppercase">UNITED STATES</p>
@@ -340,6 +340,7 @@ export const ContactModal: React.FC = () => {
                   <a
                     key={social}
                     href="#"
+                    onClick={(e) => e.preventDefault()}
                     className="text-heading-md text-black hover:opacity-70 transition-opacity font-bold uppercase rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
                   >
                     {social}

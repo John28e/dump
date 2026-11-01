@@ -3,8 +3,8 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://dump.vercel.app
+Host: https://dump-pied.vercel.app
 
 # Sitemaps
-Sitemap: https://dump.vercel.app/sitemap.xml
+Sitemap: https://dump-pied.vercel.app/sitemap.xml
 

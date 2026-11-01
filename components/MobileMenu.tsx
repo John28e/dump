@@ -122,6 +122,7 @@ export const MobileMenu: React.FC = () => {
           <li key={s.name}>
             <a
               href="#"
+              onClick={(e) => e.preventDefault()}
               className="text-menu hover:opacity-70 transition-opacity font-bold uppercase rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black"
               style={{ fontSize: "2.35vh" }}
             >

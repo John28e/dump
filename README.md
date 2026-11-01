@@ -2,6 +2,8 @@
 
 A high-fidelity layout, animation, and WebGL interaction engineering study inspired by [Podium](https://podium.global/), built with Next.js App Router, Tailwind CSS, GSAP, and Three.js.
 
+**Live Deployment**: [https://dump-pied.vercel.app](https://dump-pied.vercel.app)
+
 > **Disclaimer**: This codebase is an independent UI/UX layout, typography, and interaction engineering study created with 100% placeholder content (brand name `dump`, invented clients, invented athletes, placeholder imagery/video streams, and mock contact addresses/emails). It is not affiliated with, sponsored by, endorsed by, or copied from the original entity.
 
 ---

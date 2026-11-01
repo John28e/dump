@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
 
       <div className="relative flex flex-col md:flex-row items-center justify-between gap-4">
         {/* Left: Copyright */}
-        <p className="text-label text-white text-center md:text-left">
+        <p className="text-label text-white text-center md:text-left !normal-case">
           {PLACEHOLDER_DATA.footer.copyright}
         </p>
 
@@ -27,15 +27,15 @@ export const Footer: React.FC = () => {
         <div className="md:absolute md:left-1/2 md:-translate-x-1/2">
           <CopyEmail
             email={PLACEHOLDER_DATA.footer.email}
-            className="text-label text-white hover:text-gray-300 underline underline-offset-4"
+            className="text-label text-white hover:text-gray-300 underline underline-offset-4 !normal-case"
           >
             {PLACEHOLDER_DATA.footer.email}
           </CopyEmail>
         </div>
 
         {/* Right: Credit Line */}
-        <p className="text-label text-white text-center md:text-right">
-          Website by {PLACEHOLDER_DATA.brand}
+        <p className="text-label text-white text-center md:text-right !normal-case">
+          {PLACEHOLDER_DATA.footer.credit}
         </p>
       </div>
     </footer>

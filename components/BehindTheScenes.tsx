@@ -278,7 +278,7 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
             {/* Bottom Meta */}
             <div className="pt-2 border-t border-neutral-800">
               <span className="text-label text-gray-400 uppercase tracking-wider">
-                STUDIO ARCHIVE // [YOUR NAME]
+                STUDIO ARCHIVE // DUMP
               </span>
             </div>
           </div>
