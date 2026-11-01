@@ -1,0 +1,333 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base Spacing (below 768px: fixed px from 390px column) */
+:root {
+  --grid-cols: 5;
+  --spacing-section: 60px;
+  --spacing-grid-margin: 12px;
+  --spacing-grid-gutter: 12px;
+  --spacing-footer-top: 60px;
+  --spacing-footer-gap: 50px;
+  --spacing-ww-carousel-top: 60px;
+  --spacing-ww-carousel-bottom: 80px;
+  --spacing-header-logo-w: 110px;
+  --spacing-header-nav-gap: 16px;
+  --spacing-header-menu-icon: 20px;
+  --spacing-header-pad-top: 12px;
+  --spacing-gap-xs: 2px;
+  --spacing-gap-sm: 4px;
+  --spacing-gap-md: 8px;
+  --spacing-gap-lg: 12px;
+  --spacing-gap-xl: 24px;
+  --spacing-overlay-inset: 12px;
+  --spacing-overlay-inset-sm: 8px;
+  --spacing-card-icon-inset: 14px;
+  --spacing-card-label-right: 10px;
+  --spacing-card-label-bottom: 14px;
+  --spacing-card-text-px: 8px;
+  --spacing-icon-sm: 16px;
+  --spacing-perspective: 1000px;
+  --spacing-block-py: 24px;
+  --spacing-block-mt: 8px;
+  --spacing-list-indent: 12px;
+  --spacing-hero-bottom: 20px;
+  --spacing-hero-meta-mt: 10px;
+  --spacing-whatwedo-top: 60px;
+  --spacing-whatwedo-box-p: 40px;
+  --spacing-whatwedo-box-gap: 8px;
+  --spacing-grid-drift: 0px;
+  --spacing-project-list-top: 60px;
+  --spacing-project-list-bottom: 60px;
+  --spacing-project-list-row: 24px;
+  --spacing-project-list-scroll-pb: 40px;
+  --spacing-project-list-panel-bottom-mobile: 24px;
+  --spacing-project-list-gradient-h: 100px;
+  --spacing-project-list-poster-top: 80px;
+  --spacing-project-list-poster-inset: 2px;
+
+  /* Colors */
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-whatwedo-service: #fdf7f7;
+  --color-whatwedo-client: #dddddd;
+  --color-whatwedo-athlete: #cacaca;
+  --color-neutral-900: #171717;
+  --color-gray-800: #1e2939;
+  --color-gray-700: #364153;
+  --color-gray-400: #99a1af;
+  --color-gray-200: #e5e7eb;
+  --color-pixel-dot: #d9d9d9;
+  --color-card-year: #c4c4c4;
+}
+
+/* Fluid Spacing (from 768px up: calc(100vw / 151.2 * N)) */
+@media (min-width: 768px) {
+  :root {
+    --grid-cols: 12;
+    --spacing-section: calc(100vw / 151.2 * 12.8);
+    --spacing-grid-margin: calc(100vw / 151.2 * 2.4);
+    --spacing-grid-gutter: calc(100vw / 151.2 * 2.4);
+    --spacing-footer-top: calc(100vw / 151.2 * 12.8);
+    --spacing-footer-gap: calc(100vw / 151.2 * 11.2);
+    --spacing-ww-carousel-top: calc(100vw / 151.2 * 14.5);
+    --spacing-ww-carousel-bottom: calc(100vw / 151.2 * 12.4);
+    --spacing-header-logo-w: min(calc(100vw / 151.2 * 22), 46rem);
+    --spacing-header-nav-gap: calc(100vw / 151.2 * 3.2);
+    --spacing-header-menu-icon: calc(100vw / 151.2 * 2.7);
+    --spacing-header-pad-top: calc(100vw / 151.2 * 2.4);
+    --spacing-gap-xs: calc(100vw / 151.2 * 0.4);
+    --spacing-gap-sm: calc(100vw / 151.2 * 0.8);
+    --spacing-gap-md: calc(100vw / 151.2 * 1.6);
+    --spacing-gap-lg: calc(100vw / 151.2 * 2.4);
+    --spacing-gap-xl: calc(100vw / 151.2 * 4.8);
+    --spacing-overlay-inset: calc(100vw / 151.2 * 2.4);
+    --spacing-overlay-inset-sm: calc(100vw / 151.2 * 1.2);
+    --spacing-card-icon-inset: calc(100vw / 151.2 * 2.5);
+    --spacing-card-label-right: calc(100vw / 151.2 * 1.4);
+    --spacing-card-label-bottom: calc(100vw / 151.2 * 2.8);
+    --spacing-card-text-px: calc(100vw / 151.2 * 1);
+    --spacing-icon-sm: calc(100vw / 151.2 * 2.4);
+    --spacing-perspective: calc(100vw / 151.2 * 220);
+    --spacing-block-py: calc(100vw / 151.2 * 3.2);
+    --spacing-block-mt: calc(100vw / 151.2 * 1);
+    --spacing-list-indent: calc(100vw / 151.2 * 2);
+    --spacing-hero-bottom: calc(100vw / 151.2 * 2.5);
+    --spacing-hero-meta-mt: calc(100vw / 151.2 * 1.5);
+    --spacing-whatwedo-top: calc(100vw / 151.2 * 12.4);
+    --spacing-whatwedo-box-p: calc(100vw / 151.2 * 4.8);
+    --spacing-whatwedo-box-gap: calc(100vw / 151.2 * 1.6);
+    --spacing-grid-drift: calc(100vw / 151.2 * 20);
+    --spacing-project-list-top: calc(100vw / 151.2 * 11.6);
+    --spacing-project-list-bottom: calc(100vw / 151.2 * 12.4);
+    --spacing-project-list-row: calc(100vw / 151.2 * 6.8);
+    --spacing-project-list-scroll-pb: calc(100vw / 151.2 * 8.7);
+    --spacing-project-list-panel-bottom-mobile: calc(100vw / 151.2 * 4.4);
+    --spacing-project-list-gradient-h: calc(100vw / 151.2 * 36);
+    --spacing-project-list-poster-top: calc(100vw / 151.2 * 17.1);
+    --spacing-project-list-poster-inset: calc(100vw / 151.2 * 0.3);
+  }
+}
+
+html, body {
+  background-color: #000000;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: var(--font-futura);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 12-Column / 5-Column Fluid Grid Layout */
+.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols, 12), minmax(0, 1fr));
+  column-gap: var(--spacing-grid-gutter);
+  padding-left: var(--spacing-grid-margin);
+  padding-right: var(--spacing-grid-margin);
+}
+
+/* Typography Utilities */
+.text-display {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.0021em;
+  font-size: clamp(3.6rem, 2.5rem + 3.8vw, 7.40741vw);
+}
+
+.text-heading-xl {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 0.9;
+  font-size: clamp(2rem, 1.3rem + 2.5vw, 4.2328vw);
+}
+
+.text-heading-lg {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 24px;
+}
+@media (min-width: 768px) {
+  .text-heading-lg {
+    font-size: 1.5873vw;
+  }
+}
+
+.text-heading-md {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 20px;
+}
+@media (min-width: 768px) {
+  .text-heading-md {
+    font-size: 1.32275vw;
+  }
+}
+
+.text-menu {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-size: 20px;
+}
+@media (min-width: 768px) {
+  .text-menu {
+    font-size: 1.32275vw;
+  }
+}
+
+.text-nav {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  .text-nav {
+    font-size: 0.925926vw;
+  }
+}
+
+.text-footer-tagline {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: clamp(2rem, 1.5rem + 1.8vw, 3.7037vw);
+}
+
+.text-whatwedo-item {
+  font-family: var(--font-futura);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.2;
+  font-size: 16px;
+}
+@media (min-width: 768px) {
+  .text-whatwedo-item {
+    font-size: 1.0582vw;
+  }
+}
+
+.text-button {
+  font-family: var(--font-univers);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.2;
+  font-size: 16px;
+}
+@media (min-width: 768px) {
+  .text-button {
+    font-size: 1.0582vw;
+  }
+}
+
+.text-label {
+  font-family: var(--font-univers);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 1.1;
+  font-size: 12px;
+}
+@media (min-width: 768px) {
+  .text-label {
+    font-size: 0.793651vw;
+  }
+}
+
+.text-footer-side {
+  font-family: var(--font-univers);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: 1.1;
+  font-size: 12px;
+}
+@media (min-width: 768px) {
+  .text-footer-side {
+    font-size: 0.793651vw;
+  }
+}
+
+.text-body-md {
+  font-family: var(--font-futura);
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: 16px;
+}
+@media (min-width: 768px) {
+  .text-body-md {
+    font-size: 1.0582vw;
+  }
+}
+
+.text-body-card {
+  font-family: var(--font-futura);
+  font-weight: 400;
+  line-height: 1.4;
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  .text-body-card {
+    font-size: 0.925926vw;
+  }
+}
+
+.text-body-sm {
+  font-family: var(--font-futura);
+  font-weight: 500;
+  text-transform: uppercase;
+  line-height: 1.5;
+  font-size: 12px;
+}
+@media (min-width: 768px) {
+  .text-body-sm {
+    font-size: 0.793651vw;
+  }
+}
+
+/* 3D Flip Card Utilities */
+.perspective-container {
+  perspective: 1000px;
+}
+
+.ww-card-flip {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.ww-card[data-active="true"] .ww-card-flip {
+  transform: rotateY(180deg);
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Gradient Mask for Project List */
+.project-list-gradient-h {
+  background: linear-gradient(to top, #000000 0%, rgba(0,0,0,0.85) 40%, rgba(0,0,0,0) 100%);
+  height: var(--spacing-project-list-gradient-h);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
