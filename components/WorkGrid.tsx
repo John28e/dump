@@ -181,13 +181,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         {project.videoUrl && (
           <video
             ref={videoRef}
-            src={project.videoUrl}
+            poster={project.imageUrl}
             muted
             loop
             playsInline
             preload="none"
             className="absolute inset-0 h-full w-full object-cover transition-all duration-700 ease-out group-hover:scale-105 motion-reduce:transform-none opacity-0 group-hover:opacity-100"
-          />
+          >
+            {project.webmUrl && <source src={project.webmUrl} type="video/webm" />}
+            <source src={project.videoUrl} type="video/mp4" />
+          </video>
         )}
 
         {/* Spotlight halo cursor tracker (radius ratio 0.7 per spec) */}

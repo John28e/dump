@@ -155,7 +155,7 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
       role="button"
       tabIndex={0}
       aria-label={`Behind the scenes item: ${item.title}`}
-      className="flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px] select-none cursor-pointer rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+      className="group flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px] select-none cursor-pointer rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
       style={{ perspective: "1000px" }}
     >
       {/* Responsive Aspect Ratio: mobile 305/402, desktop/tablet 400/527 */}
@@ -195,13 +195,16 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
               {item.videoUrl && (
                 <video
                   ref={videoRef}
-                  src={item.videoUrl}
+                  poster={item.imageUrl}
                   muted
                   loop
                   playsInline
                   preload="none"
                   className="w-full h-full object-cover absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
+                >
+                  {item.webmUrl && <source src={item.webmUrl} type="video/webm" />}
+                  <source src={item.videoUrl} type="video/mp4" />
+                </video>
               )}
             </div>
 

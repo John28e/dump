@@ -7,3 +7,4 @@ Host: https://dump.vercel.app
 
 # Sitemaps
 Sitemap: https://dump.vercel.app/sitemap.xml
+

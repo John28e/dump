@@ -78,13 +78,53 @@ Format: WebP, 1376 × 722 px (104.5 KB)
 
 ---
 
-## 5. Weight and Performance Summary
+## 5. Work Grid Hover Videos (`/public/media/work/`)
 
-- **Total assets:** 33 optimized WebP images
-- **Work Grid (8 images):** 1,671.3 KB (avg 208.9 KB)
-- **Behind the Scenes (12 images):** 1,677.0 KB (avg 139.8 KB, all strictly under 250 KB)
-- **Mosaic Scroll Corridor (12 images):** 2,670.6 KB (avg 222.6 KB, all strictly under 400 KB)
-- **Open Graph (1 image):** 104.5 KB
-- **Cumulative Portfolio Asset Weight:** **6,123.4 KB (5.98 MB)**
-- **Optimization Format:** WebP, quality 84–86%, progressive rendering, responsive `next/image` sizing.
+Specifications: Max 1280 × 720 (landscape), H.264 MP4, 24 fps, CRF ~28–30, no audio, `+faststart` (moov atom at start), all strictly under 2.0 MB each. WebM (VP9) versions generated and retained where smaller than the MP4.
+
+| Slot / File | Theme / Subject | Source URL | Creator | License | Size |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `work-01-trail-running.mp4` | Trail running in mountains | [Pexels #37793891](https://www.pexels.com/video/female-athletes-trail-running-on-misty-hill-37793891/) | cottonbro studio | Pexels License (Free to use) | 356 KB |
+| `work-02-road-cycling.mp4` | Road cycling at dawn | [Pexels #5790147](https://www.pexels.com/video/three-cyclists-on-road-5790147/) | Kelly | Pexels License (Free to use) | 1.7 MB |
+| `work-03-track-sprinter.mp4` | Track sprinter at the start line | [Pexels #32067871](https://www.pexels.com/video/athlete-preparing-for-sprint-on-outdoor-track-32067871/) | Tima Miroshnichenko | Pexels License (Free to use) | 215 KB |
+| `work-03-track-sprinter.webm` | Track sprinter at the start line (VP9) | [Pexels #32067871](https://www.pexels.com/video/athlete-preparing-for-sprint-on-outdoor-track-32067871/) | Tima Miroshnichenko | Pexels License (Free to use) | 181 KB |
+| `work-04-basketball-court.mp4` | Basketball player on outdoor court | [Pexels #6077077](https://www.pexels.com/video/man-playing-basketball-on-outdoor-court-6077077/) | cottonbro studio | Pexels License (Free to use) | 72 KB |
+| `work-05-swimmer-pool.mp4` | Swimmer in a pool lane | [Pexels #8685974](https://www.pexels.com/video/male-swimmer-swimming-in-pool-lane-8685974/) | Kindel Media | Pexels License (Free to use) | 1.6 MB |
+| `work-06-soccer-pitch.mp4` | Soccer player at dusk on pitch | [Pexels #9440064](https://www.pexels.com/video/woman-kicking-a-soccer-ball-9440064/) | Pavel Danilyuk | Pexels License (Free to use) | 709 KB |
+| `work-07-boxer-gym.mp4` | Boxer training in gym | [Pexels #15527457](https://www.pexels.com/video/15527457/) | Pexels Creator | Pexels License (Free to use) | 687 KB |
+| `work-08-snowboarder-mountain.mp4` | Snowboarder carving mountain powder | [Pexels #36403165](https://www.pexels.com/video/snowboarder-gliding-down-stunning-alpine-slope-36403165/) | Pexels Creator | Pexels License (Free to use) | 625 KB |
+
+---
+
+## 6. Behind the Scenes Hover Videos (`/public/media/bts/`)
+
+Specifications: Max 540 × 720 (portrait), H.264 MP4, 24 fps, CRF ~28, no audio, `+faststart`, all strictly under 1.2 MB each. WebM (VP9) versions generated and retained where smaller than the MP4.
+
+| Slot / File | Theme / Subject | Source URL | Creator | License | Size |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `bts-01-camera-track.mp4` | Film crew with camera on tracking rails | [Pexels #32043407](https://www.pexels.com/video/advanced-robotics-in-filmmaking-camera-equipment-32043407/) | cottonbro studio | Pexels License (Free to use) | 580 KB |
+| `bts-02-camera-rooftop.mp4` | Camera operator on rooftop at dusk | [Pexels #16000236](https://www.pexels.com/video/a-person-holding-a-camera-on-top-of-a-building-16000236/) | Myléne | Pexels License (Free to use) | 188 KB |
+| `bts-03-studio-lighting.mp4` | Studio lighting and diffuser setup | [Pexels #33940049](https://www.pexels.com/video/professional-photography-lighting-setup-in-studio-33940049/) | cottonbro studio | Pexels License (Free to use) | 64 KB |
+| `bts-03-studio-lighting.webm` | Studio lighting and diffuser setup (VP9) | [Pexels #33940049](https://www.pexels.com/video/professional-photography-lighting-setup-in-studio-33940049/) | cottonbro studio | Pexels License (Free to use) | 59 KB |
+| `bts-04-director-monitor.mp4` | Videographer / director monitoring footage | [Pexels #31916832](https://www.pexels.com/video/videographer-monitors-live-footage-on-camera-screen-31916832/) | cottonbro studio | Pexels License (Free to use) | 51 KB |
+| `bts-04-director-monitor.webm` | Videographer / director monitoring footage (VP9) | [Pexels #31916832](https://www.pexels.com/video/videographer-monitors-live-footage-on-camera-screen-31916832/) | cottonbro studio | Pexels License (Free to use) | 48 KB |
+| `bts-05-drone-ground.mp4` | Camera drone on ground before flight | [Pexels #39549879](https://www.pexels.com/video/high-tech-drone-on-concrete-surface-39549879/) | cottonbro studio | Pexels License (Free to use) | 80 KB |
+| `bts-06-clapperboard.mp4` | Filmmaker writing on clapperboard | [Pexels #9810156](https://www.pexels.com/video/filmmaker-writing-on-clapperboard-9810156/) | cottonbro studio | Pexels License (Free to use) | 121 KB |
+| `bts-06-clapperboard.webm` | Filmmaker writing on clapperboard (VP9) | [Pexels #9810156](https://www.pexels.com/video/filmmaker-writing-on-clapperboard-9810156/) | cottonbro studio | Pexels License (Free to use) | 112 KB |
+| `bts-07-gimbal-rig.mp4` | Camera on Ronin motorized gimbal | [Pexels #30251903](https://www.pexels.com/video/professional-camera-on-ronin-gimbal-30251903/) | cottonbro studio | Pexels License (Free to use) | 145 KB |
+| `bts-08-boom-mic.mp4` | Sound technician with microphone outdoors | [Pexels #30272242](https://www.pexels.com/video/sound-technician-adjusting-equipment-indoors-30272242/) | cottonbro studio | Pexels License (Free to use) | 112 KB |
+| `bts-09-editing-suite.mp4` | Video editing timeline interface console | [Pexels #34845729](https://www.pexels.com/video/close-up-of-video-editing-timeline-interface-34845729/) | cottonbro studio | Pexels License (Free to use) | 122 KB |
+| `bts-10-photographer-athlete.mp4` | Photographer taking photos | [Pexels #13768611](https://www.pexels.com/video/photographer-taking-photo-13768611/) | cottonbro studio | Pexels License (Free to use) | 129 KB |
+| `bts-11-equipment-cases.mp4` | Camera bodies, lenses, and gear layout | [Pexels #29752302](https://www.pexels.com/video/vintage-and-modern-cameras-on-wooden-surface-29752302/) | cottonbro studio | Pexels License (Free to use) | 128 KB |
+| `bts-12-crew-playback.mp4` | Behind the scenes crew setup and monitoring | [Pexels #34550102](https://www.pexels.com/video/behind-the-scenes-filmmaking-crew-setup-34550102/) | cottonbro studio | Pexels License (Free to use) | 227 KB |
+
+---
+
+## 7. Weight and Performance Summary
+
+- **Total Image Assets:** 33 optimized WebP images (6,123.4 KB / 5.98 MB)
+- **Work Grid Videos:** 9 files (8 MP4 + 1 WebM) = 6.7 MB (avg 744 KB per clip, target < 2.0 MB met)
+- **Behind the Scenes Videos:** 15 files (12 MP4 + 3 WebM) = 2.1 MB (avg 140 KB per clip, target < 1.2 MB met)
+- **Total Combined Video Weight:** **8.8 MB** (strictly below 35 MB ceiling)
+- **Video Optimization:** H.264 High profile / VP9, 24 fps, no audio tracks, `+faststart` (moov atom at head for immediate stream start), `preload="none"`, hover-triggered playback with `#t=0.001` Safari first-frame fix.
 

@@ -52,14 +52,17 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         >
           {project.videoUrl && (
             <video
-              src={project.videoUrl}
+              poster={project.imageUrl}
               autoPlay
               muted
               loop
               playsInline
               preload="auto"
               className="absolute inset-0 w-full h-full object-cover"
-            />
+            >
+              {project.webmUrl && <source src={project.webmUrl} type="video/webm" />}
+              <source src={project.videoUrl} type="video/mp4" />
+            </video>
           )}
         </div>
 

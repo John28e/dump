@@ -161,13 +161,16 @@ export const ProjectListView: React.FC<ProjectListViewProps> = ({
               {activeProject.videoUrl && (
                 <video
                   key={activeProject.id}
-                  src={activeProject.videoUrl}
+                  poster={activeProject.imageUrl}
                   autoPlay
                   muted
                   loop
                   playsInline
                   className="absolute inset-0 w-full h-full object-cover opacity-80"
-                />
+                >
+                  {activeProject.webmUrl && <source src={activeProject.webmUrl} type="video/webm" />}
+                  <source src={activeProject.videoUrl} type="video/mp4" />
+                </video>
               )}
               <div className="absolute inset-0 bg-black/20" />
             </div>
