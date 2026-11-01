@@ -11,38 +11,36 @@ if (typeof window !== "undefined") {
 }
 
 // ============================================================================
-// HERO ROCK MATERIAL & LIGHTING CONSTANTS
+// HERO ROCK RUBY GLASS MATERIAL & LIGHTING CONSTANTS
 // ============================================================================
 
-// --- Red Saturation Controls ---
-// Governs base hue purity, inner luminescence, grazing edge sheen, and environment reflection tint
-const HERO_ROCK_BASE_COLOR = "#7d0a1a"; // Base color: deep ruby red, strongly saturated (#7d0a1a)
-const HERO_ROCK_EMISSIVE_COLOR = "#8f0a1e"; // Inner glow color preventing dark/grey shadow falloff (#8f0a1e)
-const HERO_ROCK_SHEEN_COLOR = "#d4122e"; // Sheen color: deep red so grazing angles glow deep red, not pink (#d4122e)
-const HERO_ROCK_RIM_COLOR = "#e01a35"; // Fresnel rim highlight color (#e01a35)
+// --- Red Glass & Attenuation Controls (Red Saturation & Absorption) ---
+const HERO_ROCK_COLOR = "#dc1a38"; // Tint of the glass (Requirement: vibrant ruby red tint)
+const HERO_ROCK_ATTENUATION_COLOR = "#7a0614"; // Absorption color in thick volume (Requirement: #7a0614)
+const HERO_ROCK_ATTENUATION_DISTANCE = 1.8; // Distance for volume absorption (center deepens to ruby, edges stay lighter)
+const HERO_ROCK_EMISSIVE_COLOR = "#3a0008"; // Deep red inner glow so deepest areas never turn black (#3a0008)
+const HERO_ROCK_EMISSIVE_INTENSITY = 0.15; // Emissive intensity: prevents black shadow falloff
 const HERO_ROCK_ENV_TINT = "#5a0612"; // Procedural room environment tint (red-to-black grading)
 
-// --- Brightness & Exposure Controls ---
-// Balances brightness with toneMapped = false so material does not clip or wash out on white
-const HERO_ROCK_MAIN_LIGHT_COLOR = "#d61836"; // Directional key light illuminating top facets (White Background Rule 1)
-const HERO_ROCK_MAIN_LIGHT_INTENSITY = 2.2; // Main light intensity: top facets reach 24-34% lightness (< 38%)
-const HERO_ROCK_EMISSIVE_INTENSITY = 0.20; // Inner glow intensity: maintains deep ruby in shadows (8-18% lightness)
-const HERO_ROCK_ENV_INTENSITY = 0.85; // Procedural environment map intensity (~0.9)
-const HERO_ROCK_SHEEN = 0.5; // Sheen intensity: grazing angle luminescence
-const HERO_ROCK_SHEEN_ROUGHNESS = 0.3; // Sheen roughness: tight grazing highlight spread
-const HERO_ROCK_RIM_INTENSITY = 0.35; // Narrow Fresnel rim highlight intensity
+// --- Transmission & Refraction Controls ---
+const HERO_ROCK_TRANSMISSION = 1.0; // Translucent glass transmission (1.0 = full glass)
+const HERO_ROCK_THICKNESS = 1.4; // Optical thickness for volume absorption (center darker than edges)
+const HERO_ROCK_IOR = 1.77; // Refractive index of ruby / corundum crystal (1.77)
+const HERO_ROCK_DISPERSION = 0.015; // Subtle chromatic dispersion across cut facets
 
-// --- Crystal Shine & Sparkle Controls ---
-// Controls cut-crystal facet specular glints, high-gloss clearcoat, and circulating glint sparkles
-const HERO_ROCK_METALNESS = 0.15; // Subtle crystalline metallic luster (0.15)
-const HERO_ROCK_ROUGHNESS = 0.18; // Low micro-surface roughness for sharp facet gloss (0.18)
-const HERO_ROCK_CLEARCOAT = 1.0; // Full clearcoat layer for cut crystal appearance (1.0)
-const HERO_ROCK_CLEARCOAT_ROUGHNESS = 0.04; // High-gloss clearcoat finish (0.04)
-const HERO_ROCK_IOR = 1.77; // Natural refractive index of ruby/corundum (1.77)
-const HERO_ROCK_SPECULAR_INTENSITY = 0.9; // Specular intensity for crisp facet reflections (0.9)
-const HERO_ROCK_SPECULAR_COLOR = "#ff9aa8"; // Warm rose specular color (not white) (#ff9aa8)
-const HERO_ROCK_GLINT_COLOR = "#ffd9df"; // Soft rose-white spark color for facet edge glints (#ffd9df)
-const HERO_ROCK_GLINT_INTENSITY = 0.30; // Point light sparkle intensity: kept low to prevent facet washing
+// --- Crystal Finish & Shine Controls ---
+const HERO_ROCK_ROUGHNESS = 0.04; // Ultra-low surface roughness for crystal transparency (0.04)
+const HERO_ROCK_CLEARCOAT = 1.0; // Full high-gloss clearcoat layer (1.0)
+const HERO_ROCK_CLEARCOAT_ROUGHNESS = 0.03; // Clearcoat mirror finish (0.03)
+const HERO_ROCK_SPECULAR_INTENSITY = 1.0; // Facet specular reflection intensity (1.0)
+const HERO_ROCK_SPECULAR_COLOR = "#ffd0d8"; // Warm rose specular highlight color (Requirement: #ffd0d8)
+const HERO_ROCK_ENV_INTENSITY = 1.2; // Procedural environment reflection intensity (~1.2)
+const HERO_ROCK_RIM_COLOR = "#ff3b55"; // Narrow Fresnel rim highlight color (Requirement: #ff3b55)
+const HERO_ROCK_RIM_INTENSITY = 0.35; // Fresnel rim brightness on grazing edges
+const HERO_ROCK_GLINT_COLOR = "#ffe3e8"; // Glint spark color for facet edge sparkles (Requirement: #ffe3e8)
+const HERO_ROCK_GLINT_INTENSITY = 0.28; // Glint point light sparkle intensity
+const HERO_ROCK_MAIN_LIGHT_COLOR = "#d61836"; // Key light color for top facet specular
+const HERO_ROCK_MAIN_LIGHT_INTENSITY = 1.2; // Key light intensity for crystal facet shine
 
 // Utility: check WebGL support safely
 function checkWebGLSupport(): boolean {
@@ -171,6 +169,10 @@ export const GlobalCanvas: React.FC = () => {
     camera.position.set(0, 0, 6.2);
     camera.layers.enable(1); // Enable layer 1 so camera sees both default meshes and rock-only lights
 
+    const isMobileViewport =
+      typeof window !== "undefined" &&
+      (window.innerWidth < 768 || window.matchMedia("(pointer: coarse)").matches);
+
     // 2. WebGL Renderer with DPR clamped to [1, 2] (Requirement 6)
     const dpr = Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
     let renderer: THREE.WebGLRenderer;
@@ -183,6 +185,9 @@ export const GlobalCanvas: React.FC = () => {
       });
       renderer.setPixelRatio(dpr);
       renderer.setSize(window.innerWidth, window.innerHeight);
+      // Performance: scale transmission buffer on mobile
+      (renderer as unknown as { transmissionResolutionScale: number }).transmissionResolutionScale =
+        isMobileViewport ? 0.5 : 1.0;
     } catch {
       setHasWebGL(false);
       return;
@@ -234,30 +239,54 @@ export const GlobalCanvas: React.FC = () => {
       }
     });
 
-    // Dark saturated ruby crystal material (Material 1-7)
+    // Opaque white backdrop plane directly behind rock for transmission pass only (Backdrop 1-3)
+    const backdropGeo = new THREE.PlaneGeometry(3.0, 3.0);
+    const backdropMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 1.0,
+    });
+    const backdropPlane = new THREE.Mesh(backdropGeo, backdropMat);
+    backdropPlane.position.set(0, 0, -1.15);
+    backdropPlane.layers.enable(1);
+
+    // Visible to transmission pass only (colorWrite/depthWrite enabled when target != null)
+    backdropPlane.onBeforeRender = (rndr) => {
+      const isTransmissionPass = rndr.getRenderTarget() !== null;
+      backdropMat.colorWrite = isTransmissionPass;
+      backdropMat.depthWrite = isTransmissionPass;
+    };
+    heroGroup.add(backdropPlane);
+
+    // Dark ruby translucent glass material (Material 1-5)
     const rockMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(HERO_ROCK_BASE_COLOR), // #7d0a1a
-      roughness: HERO_ROCK_ROUGHNESS, // 0.18
-      metalness: HERO_ROCK_METALNESS, // 0.15
-      flatShading: true, // Cut crystal facets
-      toneMapped: false, // toneMapped = false on this material only
-      emissive: new THREE.Color(HERO_ROCK_EMISSIVE_COLOR), // #8f0a1e
-      emissiveIntensity: HERO_ROCK_EMISSIVE_INTENSITY, // 0.25
-      specularColor: new THREE.Color(HERO_ROCK_SPECULAR_COLOR), // #ff9aa8
-      specularIntensity: HERO_ROCK_SPECULAR_INTENSITY, // 0.9
-      clearcoat: HERO_ROCK_CLEARCOAT, // 1.0
-      clearcoatRoughness: HERO_ROCK_CLEARCOAT_ROUGHNESS, // 0.04
+      transmission: HERO_ROCK_TRANSMISSION, // 1.0
+      thickness: HERO_ROCK_THICKNESS, // 1.4
+      color: new THREE.Color(HERO_ROCK_COLOR), // #c4122e
+      attenuationColor: new THREE.Color(HERO_ROCK_ATTENUATION_COLOR), // #7a0614
+      attenuationDistance: HERO_ROCK_ATTENUATION_DISTANCE, // 0.9
       ior: HERO_ROCK_IOR, // 1.77
-      sheen: HERO_ROCK_SHEEN, // 0.5
-      sheenColor: new THREE.Color(HERO_ROCK_SHEEN_COLOR), // #d4122e
-      sheenRoughness: HERO_ROCK_SHEEN_ROUGHNESS, // 0.3
+      roughness: HERO_ROCK_ROUGHNESS, // 0.04
+      clearcoat: HERO_ROCK_CLEARCOAT, // 1.0
+      clearcoatRoughness: HERO_ROCK_CLEARCOAT_ROUGHNESS, // 0.03
+      specularIntensity: HERO_ROCK_SPECULAR_INTENSITY, // 1.0
+      specularColor: new THREE.Color(HERO_ROCK_SPECULAR_COLOR), // #ffd0d8
+      emissive: new THREE.Color(HERO_ROCK_EMISSIVE_COLOR), // #3a0008
+      emissiveIntensity: HERO_ROCK_EMISSIVE_INTENSITY, // 0.15
+      flatShading: true, // Cut crystal facets
+      side: isMobileViewport ? THREE.FrontSide : THREE.DoubleSide, // DoubleSide on desktop
       envMap: rubyEnvMap,
-      envMapIntensity: HERO_ROCK_ENV_INTENSITY, // 0.90
+      envMapIntensity: HERO_ROCK_ENV_INTENSITY, // 1.2
       transparent: true,
       opacity: 1.0,
     });
 
-    // Fresnel rim via onBeforeCompile: narrow, color #e01a35, reaching bright rose-white only at peak
+    if (!isMobileViewport && "dispersion" in rockMaterial) {
+      (rockMaterial as unknown as { dispersion: number }).dispersion = HERO_ROCK_DISPERSION;
+    }
+
+    // Fresnel rim via onBeforeCompile: narrow, color #ff3b55, reaching bright rose-white only at peak
     rockMaterial.onBeforeCompile = (shader) => {
       shader.fragmentShader = shader.fragmentShader.replace(
         "#include <opaque_fragment>",
@@ -269,11 +298,11 @@ export const GlobalCanvas: React.FC = () => {
         diffuseColor.a *= material.transmissionAlpha;
         #endif
 
-        // Narrow Fresnel rim highlight
+        // Narrow Fresnel rim highlight (Requirement: color #ff3b55)
         float rimNdotV = saturate( dot( normal, geometryViewDir ) );
         float rimFactor = pow( 1.0 - rimNdotV, 4.5 ); // Narrow rim
-        vec3 rimBase = vec3( 0.8784, 0.1020, 0.2078 ); // #e01a35
-        vec3 rimPeak = vec3( 1.0, 0.92, 0.94 ); // Reaches bright rose-white at peak on sharpest facets
+        vec3 rimBase = vec3( 1.0, 0.2314, 0.3333 ); // #ff3b55
+        vec3 rimPeak = vec3( 1.0, 0.92, 0.94 ); // Reaches rose-white at peak on sharpest facets
         vec3 finalRimColor = mix( rimBase, rimPeak, pow( rimFactor, 3.0 ) );
         outgoingLight += finalRimColor * ( rimFactor * ${HERO_ROCK_RIM_INTENSITY.toFixed(2)} );
 
@@ -288,15 +317,15 @@ export const GlobalCanvas: React.FC = () => {
 
     // Two small glint point lights used ONLY for this rock (layer 1)
     const glintLight1 = new THREE.PointLight(
-      new THREE.Color(HERO_ROCK_GLINT_COLOR), // #ffd9df
-      HERO_ROCK_GLINT_INTENSITY, // 0.30
+      new THREE.Color(HERO_ROCK_GLINT_COLOR), // #ffe3e8
+      HERO_ROCK_GLINT_INTENSITY, // 0.28
       7,
       2
     );
     glintLight1.layers.set(1);
 
     const glintLight2 = new THREE.PointLight(
-      new THREE.Color(HERO_ROCK_GLINT_COLOR), // #ffd9df
+      new THREE.Color(HERO_ROCK_GLINT_COLOR), // #ffe3e8
       HERO_ROCK_GLINT_INTENSITY * 0.8,
       7,
       2
@@ -648,6 +677,10 @@ export const GlobalCanvas: React.FC = () => {
         rockMaterial.opacity = Math.max(0, 1.0 - p * 2.0);
         rockMesh.visible = rockMaterial.opacity > 0.001;
 
+        // Backdrop plane smooth fade so mosaic planes behind are naturally refracted
+        backdropMat.opacity = Math.max(0, 1.0 - p * 3.0);
+        backdropPlane.visible = backdropMat.opacity > 0.001;
+
         // Mosaic planes: unfold outwards and zoom past camera
         mosaicPlanes.forEach((item) => {
           const [bx, by, bz] = item.baseOffset;
@@ -714,6 +747,8 @@ export const GlobalCanvas: React.FC = () => {
       // Dispose Three.js resources
       rockGeo.dispose();
       rockMaterial.dispose();
+      backdropGeo.dispose();
+      backdropMat.dispose();
       rubyEnvMap.dispose();
       landscapeGeo.dispose();
       portraitGeo.dispose();
