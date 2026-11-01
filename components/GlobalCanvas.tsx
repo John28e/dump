@@ -10,6 +10,35 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+// ============================================================================
+// HERO ROCK MATERIAL & LIGHTING CONSTANTS
+// ============================================================================
+
+// --- Red Saturation Controls ---
+// Governs base hue purity, inner luminescence, and grazing edge color saturation
+const HERO_ROCK_BASE_COLOR = "#7d0a1a"; // Deep ruby red, strongly saturated (Requirement 1)
+const HERO_ROCK_EMISSIVE_COLOR = "#8f0a1e"; // Inner glow preventing dark/grey shadow falloff (Requirement 3)
+const HERO_ROCK_SHEEN_COLOR = "#d4122e"; // Grazing angle sheen color (deep red, not pink) (Requirement 6)
+const HERO_ROCK_RIM_COLOR = "#e01a35"; // Narrow Fresnel rim highlight color (Requirement 7)
+const HERO_ROCK_ENV_TINT = "#5a0612"; // Environment map tint (red-to-black grading) (Requirement 4)
+
+// --- Brightness Controls ---
+// Compensates toneMapped = false to prevent clipping while maintaining rich depth (Requirement 2)
+const HERO_ROCK_EMISSIVE_INTENSITY = 0.25; // Luminescent inner glow intensity (Requirement 3)
+const HERO_ROCK_ENV_INTENSITY = 0.90; // Lowered envMap intensity to prevent surface washing (Requirement 4)
+const HERO_ROCK_SHEEN = 0.5; // Sheen contribution on grazing angles (Requirement 6)
+const HERO_ROCK_RIM_INTENSITY = 0.40; // Narrow Fresnel rim intensity (Requirement 7)
+
+// --- Shine & Sparkle Controls ---
+// Controls facet specular glints, high-gloss clearcoat reflections, and glint sparkles (Requirement 5 & 8)
+const HERO_ROCK_SPECULAR_COLOR = "#ff9aa8"; // Warm rose specular (not pure white) (Requirement 5)
+const HERO_ROCK_SPECULAR_INTENSITY = 0.9; // Specular highlight reflectance (Requirement 5)
+const HERO_ROCK_ROUGHNESS = 0.18; // Micro-surface roughness for sharp facet gloss (Requirement 5)
+const HERO_ROCK_CLEARCOAT = 1.0; // Multi-layer clearcoat finish (Requirement 5)
+const HERO_ROCK_CLEARCOAT_ROUGHNESS = 0.04; // Mirror-like clearcoat facet gloss (Requirement 5)
+const HERO_ROCK_GLINT_COLOR = "#ffd9df"; // Soft rose-white glint spark color (Requirement 8)
+const HERO_ROCK_GLINT_INTENSITY = 0.35; // Low intensity so glints stay small sparkles without washing body (Requirement 8)
+
 // Utility: check WebGL support safely
 function checkWebGLSupport(): boolean {
   if (typeof window === "undefined") return false;
@@ -27,6 +56,85 @@ function checkWebGLSupport(): boolean {
 function checkReducedMotion(): boolean {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+// Helper: Tint the rock'\''s own envMap red-to-black with warm white area lights (Requirement 4)
+function createRubyRoomEnvironment(): THREE.Scene {
+  const envScene = new THREE.Scene();
+  envScene.name = "RubyRoomEnvironment";
+  envScene.background = new THREE.Color("#150104"); // Deep ruby-black environment background
+  envScene.position.y = -3.5;
+
+  const geometry = new THREE.BoxGeometry();
+  geometry.deleteAttribute("uv");
+
+  // Tint walls and floor toward #5a0612 (red-to-black grading)
+  // Using emissive dark ruby ensures the room reflects deep red, not white-grey
+  const roomMaterial = new THREE.MeshLambertMaterial({
+    side: THREE.BackSide,
+    color: 0x000000,
+    emissive: new THREE.Color(HERO_ROCK_ENV_TINT), // #5a0612
+    emissiveIntensity: 0.75,
+  });
+
+  const boxMaterial = new THREE.MeshLambertMaterial({
+    color: 0x000000,
+    emissive: new THREE.Color("#2a0208"), // Darker red-to-black
+    emissiveIntensity: 0.6,
+  });
+
+  const room = new THREE.Mesh(geometry, roomMaterial);
+  room.position.set(-0.757, 13.219, 0.717);
+  room.scale.set(31.713, 28.305, 28.591);
+  envScene.add(room);
+
+  const boxes = new THREE.InstancedMesh(geometry, boxMaterial, 6);
+  const transform = new THREE.Object3D();
+
+  const boxConfigs = [
+    { pos: [-10.906, 2.009, 1.846], rot: [0, -0.195, 0], scale: [2.328, 7.905, 4.651] },
+    { pos: [-5.607, -0.754, -0.758], rot: [0, 0.994, 0], scale: [1.97, 1.534, 3.955] },
+    { pos: [6.167, 0.857, 7.803], rot: [0, 0.561, 0], scale: [3.927, 6.285, 3.687] },
+    { pos: [-2.017, 0.018, 6.124], rot: [0, 0.333, 0], scale: [2.002, 4.566, 2.064] },
+    { pos: [2.291, -0.756, -2.621], rot: [0, -0.286, 0], scale: [1.546, 1.552, 1.496] },
+    { pos: [-2.193, -0.369, -5.547], rot: [0, 0.516, 0], scale: [3.875, 3.487, 2.986] },
+  ];
+
+  boxConfigs.forEach((c, idx) => {
+    transform.position.set(c.pos[0], c.pos[1], c.pos[2]);
+    transform.rotation.set(c.rot[0], c.rot[1], c.rot[2]);
+    transform.scale.set(c.scale[0], c.scale[1], c.scale[2]);
+    transform.updateMatrix();
+    boxes.setMatrixAt(idx, transform.matrix);
+  });
+  envScene.add(boxes);
+
+  // Area lights: warm white only at small sizes (Requirement 4)
+  const createAreaLightMat = (intensity: number) => {
+    return new THREE.MeshLambertMaterial({
+      color: 0x000000,
+      emissive: new THREE.Color("#fff2f4"),
+      emissiveIntensity: intensity,
+    });
+  };
+
+  const lights = [
+    { pos: [-16.116, 14.37, 8.208], scale: [0.1, 0.7, 0.7], intensity: 8 },
+    { pos: [-16.109, 18.021, -8.207], scale: [0.1, 0.7, 0.7], intensity: 8 },
+    { pos: [14.904, 12.198, -1.832], scale: [0.15, 1.0, 1.4], intensity: 5 },
+    { pos: [-0.462, 8.89, 14.52], scale: [1.1, 1.2, 0.088], intensity: 7 },
+    { pos: [3.235, 11.486, -12.541], scale: [0.7, 0.6, 0.1], intensity: 5 },
+    { pos: [0.0, 20.0, 0.0], scale: [0.3, 0.1, 0.3], intensity: 12 },
+  ];
+
+  lights.forEach((l) => {
+    const mesh = new THREE.Mesh(geometry, createAreaLightMat(l.intensity));
+    mesh.position.set(l.pos[0], l.pos[1], l.pos[2]);
+    mesh.scale.set(l.scale[0], l.scale[1], l.scale[2]);
+    envScene.add(mesh);
+  });
+
+  return envScene;
 }
 
 export const GlobalCanvas: React.FC = () => {
@@ -102,48 +210,86 @@ export const GlobalCanvas: React.FC = () => {
     }
     rockGeo.computeVertexNormals();
 
-    const rockShaderMaterial = new THREE.ShaderMaterial({
-      uniforms: {
-        uTime: { value: 0 },
-        uOpacity: { value: 1.0 },
-      },
-      vertexShader: `
-        uniform float uTime;
-        varying vec3 vNormal;
-        varying vec3 vWorldPos;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          vec3 pos = position;
-          pos += normal * (sin(pos.y * 3.0 + uTime * 1.5) * 0.02);
-          vec4 worldPos = modelMatrix * vec4(pos, 1.0);
-          vWorldPos = worldPos.xyz;
-          gl_Position = projectionMatrix * viewMatrix * worldPos;
+    // Generate tinted Ruby RoomEnvironment for rock reflections (Requirement 4)
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    const rubyEnvScene = createRubyRoomEnvironment();
+    const rubyEnvMap = pmremGenerator.fromScene(rubyEnvScene).texture;
+    pmremGenerator.dispose();
+    rubyEnvScene.traverse((obj) => {
+      if (obj instanceof THREE.Mesh) {
+        obj.geometry?.dispose();
+        if (Array.isArray(obj.material)) {
+          obj.material.forEach((m) => m.dispose());
+        } else {
+          obj.material?.dispose();
         }
-      `,
-      fragmentShader: `
-        uniform float uOpacity;
-        varying vec3 vNormal;
-        varying vec3 vWorldPos;
-        void main() {
-          vec3 lightDir = normalize(vec3(0.5, 0.9, 0.7));
-          float diff = max(dot(vNormal, lightDir), 0.0);
-          float amb = 0.35;
-          // Cool slate stone palette matching spec-screenshots
-          vec3 stoneDark = vec3(0.18, 0.20, 0.22);
-          vec3 stoneLight = vec3(0.54, 0.55, 0.53);
-          vec3 baseColor = mix(stoneDark, stoneLight, clamp(vNormal.y * 0.5 + 0.5, 0.0, 1.0));
-          vec3 color = baseColor * (diff * 0.75 + amb);
-          // Subtle rim lighting
-          float rim = 1.0 - max(dot(vNormal, vec3(0.0, 0.0, 1.0)), 0.0);
-          color += vec3(0.12, 0.12, 0.12) * pow(rim, 3.5);
-          gl_FragColor = vec4(color, uOpacity);
-        }
-      `,
-      transparent: true,
+      }
     });
 
-    const rockMesh = new THREE.Mesh(rockGeo, rockShaderMaterial);
+    // Dark saturated ruby material (Requirements 1, 2, 3, 4, 5, 6, 7)
+    const rockMaterial = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(HERO_ROCK_BASE_COLOR), // #7d0a1a
+      roughness: HERO_ROCK_ROUGHNESS, // 0.18
+      metalness: 0.02,
+      flatShading: true, // Keep flatShading on
+      toneMapped: false, // Requirement 2: toneMapped = false on this material only
+      emissive: new THREE.Color(HERO_ROCK_EMISSIVE_COLOR), // #8f0a1e
+      emissiveIntensity: HERO_ROCK_EMISSIVE_INTENSITY, // 0.25
+      specularColor: new THREE.Color(HERO_ROCK_SPECULAR_COLOR), // #ff9aa8
+      specularIntensity: HERO_ROCK_SPECULAR_INTENSITY, // 0.9
+      clearcoat: HERO_ROCK_CLEARCOAT, // 1.0
+      clearcoatRoughness: HERO_ROCK_CLEARCOAT_ROUGHNESS, // 0.04
+      sheen: HERO_ROCK_SHEEN, // 0.5
+      sheenColor: new THREE.Color(HERO_ROCK_SHEEN_COLOR), // #d4122e
+      envMap: rubyEnvMap,
+      envMapIntensity: HERO_ROCK_ENV_INTENSITY, // 0.90
+      transparent: true,
+      opacity: 1.0,
+    });
+
+    // Requirement 7: Narrow Fresnel rim highlight reaching bright rose-white at peak
+    rockMaterial.onBeforeCompile = (shader) => {
+      shader.fragmentShader = shader.fragmentShader.replace(
+        "#include <opaque_fragment>",
+        `
+        #ifdef OPAQUE
+        diffuseColor.a = 1.0;
+        #endif
+        #ifdef USE_TRANSMISSION
+        diffuseColor.a *= material.transmissionAlpha;
+        #endif
+
+        // Requirement 7: Narrow Fresnel rim highlight
+        float rimNdotV = saturate( dot( normal, geometryViewDir ) );
+        float rimFactor = pow( 1.0 - rimNdotV, 4.0 ); // Narrow rim
+        vec3 rimBase = vec3( 0.8784, 0.1020, 0.2078 ); // #e01a35
+        vec3 rimPeak = vec3( 1.0, 0.92, 0.94 ); // Reaches bright rose-white at peak on sharpest facets
+        vec3 finalRimColor = mix( rimBase, rimPeak, pow( rimFactor, 3.0 ) );
+        outgoingLight += finalRimColor * ( rimFactor * ${HERO_ROCK_RIM_INTENSITY.toFixed(2)} );
+
+        gl_FragColor = vec4( outgoingLight, diffuseColor.a );
+        `
+      );
+    };
+
+    const rockMesh = new THREE.Mesh(rockGeo, rockMaterial);
     heroGroup.add(rockMesh);
+
+    // Glint lights for small facet sparkles (Requirement 8)
+    const glintLight1 = new THREE.PointLight(
+      new THREE.Color(HERO_ROCK_GLINT_COLOR), // #ffd9df
+      HERO_ROCK_GLINT_INTENSITY, // 1.4
+      7,
+      2
+    );
+    const glintLight2 = new THREE.PointLight(
+      new THREE.Color(HERO_ROCK_GLINT_COLOR), // #ffd9df
+      HERO_ROCK_GLINT_INTENSITY * 0.75,
+      7,
+      2
+    );
+    heroGroup.add(glintLight1);
+    heroGroup.add(glintLight2);
 
     // B. Unfolding Mosaic Grid of Textured Planes (Requirement 3 & 5)
     const mosaicGroup = new THREE.Group();
@@ -438,11 +584,29 @@ export const GlobalCanvas: React.FC = () => {
 
       // Render Hero Scene
       if (activeScene === "hero") {
-        rockShaderMaterial.uniforms.uTime.value = elapsedTime;
-
         // Rock podium: subtle floating & scaling with scroll
         rockMesh.rotation.y = elapsedTime * 0.12;
         rockMesh.rotation.x = Math.sin(elapsedTime * 0.3) * 0.08;
+
+        // Glint lights slow circling motion (Requirement 8)
+        if (!isReducedMotion) {
+          const glintAngle1 = elapsedTime * 0.22;
+          glintLight1.position.set(
+            Math.cos(glintAngle1) * 2.6,
+            1.1 + Math.sin(glintAngle1 * 0.6) * 0.5,
+            Math.sin(glintAngle1) * 2.6
+          );
+
+          const glintAngle2 = -elapsedTime * 0.16 + 2.4;
+          glintLight2.position.set(
+            Math.cos(glintAngle2) * 2.4,
+            -0.7 + Math.cos(glintAngle2 * 0.4) * 0.4,
+            Math.sin(glintAngle2) * 2.4
+          );
+        } else {
+          glintLight1.position.set(2.2, 1.1, 1.8);
+          glintLight2.position.set(-1.8, -0.7, -1.6);
+        }
 
         const p = heroScrollProgress;
 
@@ -456,7 +620,8 @@ export const GlobalCanvas: React.FC = () => {
         // Rock podium scale and fade
         const rockScale = 1.0 + p * 0.6;
         rockMesh.scale.set(rockScale, rockScale, rockScale);
-        rockShaderMaterial.uniforms.uOpacity.value = Math.max(0, 1.0 - p * 2.0);
+        rockMaterial.opacity = Math.max(0, 1.0 - p * 2.0);
+        rockMesh.visible = rockMaterial.opacity > 0.001;
 
         // Mosaic planes: unfold outwards and zoom past camera
         mosaicPlanes.forEach((item) => {
@@ -523,7 +688,8 @@ export const GlobalCanvas: React.FC = () => {
 
       // Dispose Three.js resources
       rockGeo.dispose();
-      rockShaderMaterial.dispose();
+      rockMaterial.dispose();
+      rubyEnvMap.dispose();
       landscapeGeo.dispose();
       portraitGeo.dispose();
       mosaicPlanes.forEach((item) => {
