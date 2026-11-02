@@ -78,6 +78,7 @@ export const MobileMenu: React.FC = () => {
       aria-modal="true"
       aria-label="Navigation Menu"
       aria-hidden={!isMobileMenuOpen}
+      inert={!isMobileMenuOpen || undefined}
       className={`fixed inset-0 z-[100] flex flex-col items-end justify-center bg-black px-grid-margin text-white transition-opacity duration-300 ease-out md:hidden select-none ${
         isMobileMenuOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
       }`}
