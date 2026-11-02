@@ -1160,7 +1160,7 @@ export const GlobalCanvas: React.FC = () => {
     // Render Loop & Performance Optimization
     // ----------------------------------------------------
     let animId: number;
-    let clock = new THREE.Clock();
+    const clockStart = performance.now();
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
@@ -1169,7 +1169,7 @@ export const GlobalCanvas: React.FC = () => {
         return;
       }
 
-      const elapsedTime = clock.getElapsedTime();
+      const elapsedTime = (performance.now() - clockStart) * 0.001;
 
       // Render Hero Scene
       if (activeScene === "hero") {
