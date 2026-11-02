@@ -1167,20 +1167,29 @@ export const GlobalCanvas: React.FC = () => {
     // Render Loop & Performance Optimization
     // ----------------------------------------------------
     let animId: number;
-    const clockStart = performance.now();
+    let lastTime = performance.now();
+    let accumulatedTime = 0;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
+
+      const now = performance.now();
+      const rawDelta = (now - lastTime) * 0.001;
+      lastTime = now;
 
       if (document.hidden) {
         return;
       }
 
+      // Clamp time delta to max 0.1s per frame to prevent rotation/glint jump on tab resume
+      const dt = Math.min(rawDelta, 0.1);
+      accumulatedTime += dt;
+
       if (activeScene === "none") {
         return;
       }
 
-      const elapsedTime = (performance.now() - clockStart) * 0.001;
+      const elapsedTime = accumulatedTime;
 
       // Render Hero Scene
       if (activeScene === "hero") {
