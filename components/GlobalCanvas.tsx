@@ -1156,6 +1156,13 @@ export const GlobalCanvas: React.FC = () => {
       });
     });
 
+    // Refresh ScrollTrigger once fonts are loaded to ensure precise layout geometry
+    if (typeof document !== "undefined" && "fonts" in document) {
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+      });
+    }
+
     // ----------------------------------------------------
     // Render Loop & Performance Optimization
     // ----------------------------------------------------
@@ -1164,6 +1171,10 @@ export const GlobalCanvas: React.FC = () => {
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
+
+      if (document.hidden) {
+        return;
+      }
 
       if (activeScene === "none") {
         return;
