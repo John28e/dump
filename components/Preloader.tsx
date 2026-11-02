@@ -4,17 +4,31 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import gsap from "gsap";
 import { useAppStore } from "@/lib/store";
 import { useLenisScroll } from "@/hooks/useLenisScroll";
+import {
+  ProgressiveFluxLoader,
+  ProgressiveFluxPhase,
+} from "@/components/ui/progressive-flux-loader";
+
+const PRELOADER_PHASES: ProgressiveFluxPhase[] = [
+  { at: 0, label: "on your marks" },
+  { at: 35, label: "get set" },
+  { at: 70, label: "go" },
+  { at: 100, label: "ready" },
+];
 
 export const Preloader: React.FC = () => {
   const [visible, setVisible] = useState(true);
+  const [progress, setProgress] = useState(0);
   const setLoaded = useAppStore((s) => s.setLoaded);
   const { stop, start } = useLenisScroll();
 
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const percentRef = useRef<HTMLSpanElement | null>(null);
   const progressRef = useRef(0);
+  const displayedProgressRef = useRef(0);
   const rafId = useRef<number | null>(null);
+  const holdTimer = useRef<number | null>(null);
   const startTime = useRef<number>(0);
+  const isCompletingRef = useRef(false);
 
   const handleFinish = useCallback(() => {
     if (!containerRef.current) return;
@@ -44,19 +58,29 @@ export const Preloader: React.FC = () => {
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    if (isReducedMotion) {
-      if (percentRef.current) percentRef.current.textContent = "100%";
-      progressRef.current = 1;
-      handleFinish();
-      return;
-    }
-
     // Lock scroll while preloader is active
     stop();
     document.body.style.overflow = "hidden";
 
+    if (isReducedMotion) {
+      progressRef.current = 1;
+      displayedProgressRef.current = 100;
+      setProgress(100);
+      const EXIT_HOLD_MS = 150;
+      holdTimer.current = window.setTimeout(() => {
+        handleFinish();
+      }, EXIT_HOLD_MS);
+      return () => {
+        if (holdTimer.current) clearTimeout(holdTimer.current);
+        start();
+        document.body.style.overflow = "";
+      };
+    }
+
     progressRef.current = 0;
+    displayedProgressRef.current = 0;
     startTime.current = performance.now();
+    isCompletingRef.current = false;
 
     const update = () => {
       const elapsed = (performance.now() - startTime.current) / 1000;
@@ -68,12 +92,26 @@ export const Preloader: React.FC = () => {
         progressRef.current = 1;
       }
 
-      if (percentRef.current) {
-        percentRef.current.textContent = `${Math.floor(100 * progressRef.current)}%`;
-      }
+      const rawProgress = Math.min(100, Math.max(0, progressRef.current * 100));
+      // Stretch displayed value so label sequence lasts at least 1.8 seconds:
+      // at any elapsed < 1.8s, progress is capped by (elapsed / 1.8) * 100.
+      const timeCappedProgress = (elapsed / 1.8) * 100;
+      const candidate = Math.min(rawProgress, timeCappedProgress);
+      const nextDisplay = Math.min(
+        100,
+        Math.max(displayedProgressRef.current, candidate),
+      );
+      displayedProgressRef.current = nextDisplay;
+      setProgress(nextDisplay);
 
-      if (progressRef.current >= 1) {
-        handleFinish();
+      if (nextDisplay >= 100 && rawProgress >= 100) {
+        if (!isCompletingRef.current) {
+          isCompletingRef.current = true;
+          const EXIT_HOLD_MS = 700;
+          holdTimer.current = window.setTimeout(() => {
+            handleFinish();
+          }, EXIT_HOLD_MS);
+        }
       } else {
         rafId.current = requestAnimationFrame(update);
       }
@@ -83,6 +121,7 @@ export const Preloader: React.FC = () => {
 
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current);
+      if (holdTimer.current) clearTimeout(holdTimer.current);
       start();
       document.body.style.overflow = "";
     };
@@ -98,16 +137,22 @@ export const Preloader: React.FC = () => {
       aria-label="Loading site"
       className="fixed inset-0 z-[10000] flex h-screen w-full items-center justify-center bg-white pointer-events-none select-none transition-none"
     >
-      {/* Centered black circle */}
-      <div className="w-[2.38vh] h-[2.38vh] rounded-full bg-black" />
-
-      {/* 0-100% counter positioned at top-right */}
-      <span
-        ref={percentRef}
-        className="absolute top-grid-margin right-grid-margin text-heading-md text-black font-bold tracking-tight"
+      <div
+        className="flex w-full h-full items-center justify-center px-6"
+        style={
+          {
+            "--flux-from": "#7d0a1a",
+            "--flux-to": "#ff3b55",
+          } as React.CSSProperties
+        }
       >
-        0%
-      </span>
+        <ProgressiveFluxLoader
+          value={progress}
+          phases={PRELOADER_PHASES}
+          barClassName="bg-black/10"
+          textClassName="uppercase font-bold text-black"
+        />
+      </div>
     </div>
   );
 };
