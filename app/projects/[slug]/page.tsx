@@ -31,7 +31,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         >
           <span>←</span> Back to {PLACEHOLDER_DATA.brand}
         </Link>
-        <span className="text-label text-gray-500 uppercase">{project.year}</span>
+        <span className="text-label text-gray-400 uppercase">{project.year}</span>
       </div>
 
       {/* Main Hero & Media */}
@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
       </div>
 
       {/* Footer Info */}
-      <div className="pt-8 border-t border-gray-800 flex justify-between items-center text-label text-gray-500">
+      <div className="pt-8 border-t border-gray-800 flex justify-between items-center text-label text-gray-400">
         <span>© 2026 {PLACEHOLDER_DATA.brand}</span>
         <span className="uppercase">{project.title} — {project.client}</span>
       </div>
