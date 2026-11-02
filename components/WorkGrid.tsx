@@ -99,6 +99,7 @@ export const WorkGrid: React.FC = () => {
       ref={sectionRef}
       className="relative z-10 w-full bg-black text-white px-grid-margin pt-section pb-[calc(var(--spacing-section)+var(--spacing-grid-drift))] grid grid-cols-1 gap-y-gap-xl min-[768px]:grid-cols-3 min-[1280px]:grid-cols-4 min-[768px]:gap-x-grid-gutter"
     >
+      <h2 className="sr-only">Featured Work</h2>
       {PLACEHOLDER_PROJECTS.map((project) => (
         <ProjectCard key={project.id} project={project} />
       ))}
