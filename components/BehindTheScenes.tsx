@@ -258,7 +258,7 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
                   e.stopPropagation();
                   setIsFlipped(false);
                 }}
-                className="text-white/60 hover:text-white cursor-pointer p-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="text-white/60 hover:text-white cursor-pointer p-2.5 -m-1.5 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label={`Close details for ${item.title}`}
               >
                 <svg
