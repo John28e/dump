@@ -10,10 +10,11 @@ if (typeof window !== "undefined") {
 }
 
 export const Hero: React.FC = () => {
+  const sectionRef = useRef<HTMLElement | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (!overlayRef.current) return;
+    if (!overlayRef.current || !sectionRef.current) return;
 
     const ctx = gsap.context(() => {
       // Fade out the hero typography & light aperture mask on initial scroll
@@ -21,19 +22,19 @@ export const Hero: React.FC = () => {
         opacity: 0,
         ease: "power2.inOut",
         scrollTrigger: {
-          trigger: "#hero",
+          trigger: sectionRef.current,
           start: "top top",
           end: "45% top",
           scrub: true,
         },
       });
-    }, overlayRef);
+    }, sectionRef);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section id="hero" className="relative w-full bg-transparent text-black select-none">
+    <section ref={sectionRef} id="hero" className="relative w-full bg-transparent text-black select-none">
       {/* Fixed typography and aperture overlay (fades out into dark mosaic on scroll) */}
       <div
         ref={overlayRef}
