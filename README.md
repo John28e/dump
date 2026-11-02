@@ -1,14 +1,26 @@
 # dump — Creative Direction & Athletic Production
 
-A high-fidelity layout, animation, and WebGL interaction engineering study inspired by [Podium](https://podium.global/), built with Next.js App Router, Tailwind CSS, GSAP, and Three.js.
+`dump` is a UI/UX study of podium.global rebuilt as a front-end learning project, with placeholder content and no assets taken from the original. It explores advanced creative development patterns on the modern web—including synchronized WebGL 3D scenes, fluid responsive typography, momentum scrolling with Lenis and GSAP ScrollTrigger, and accessible interactive UI components.
 
-**Live Deployment**: [https://dump-pied.vercel.app](https://dump-pied.vercel.app)
+## 🔗 Live Demo
 
-> **Disclaimer**: This codebase is an independent UI/UX layout, typography, and interaction engineering study created with 100% placeholder content (brand name `dump`, invented clients, invented athletes, placeholder imagery/video streams, and mock contact addresses/emails). It is not affiliated with, sponsored by, endorsed by, or copied from the original entity.
+Live Deployment: [https://dump-pied.vercel.app](https://dump-pied.vercel.app)
 
----
+## 🏗 What I Built
 
-## 🛠 Tech Stack
+A single-page athletic production studio website with dynamic project subpages and rich creative interactions:
+
+- **Fullscreen Preloader**: Smooth 0–100% lerped progress counter with animated circular SVG indicator and respect for `prefers-reduced-motion`.
+- **Fixed Reactive Navigation**: Header dynamically transitioning its color between dark and light tokens across section boundaries (`#hero`, `#work`, `#about`, `#worldwide`) via GSAP ScrollTrigger.
+- **Hero & 3D WebGL Canvas**: Procedural rock-podium geometry rendered with translucent ruby glass and custom Fresnel rim lighting, smoothly translating into an unfolding 12-plane image mosaic scroll track over `300svh`.
+- **Work Grid & Dynamic Project Routing**: Multi-column responsive work grid (4 desktop / 3 tablet / 1 mobile) with parallax card drift, hover video previews, and dedicated dynamic project pages (`/projects/[slug]`).
+- **Interactive View Toggle**: Floating toggle pill switching between visual grid layout and an editorial project list index with dashed pixel dividers and hover video preview.
+- **Behind the Scenes Carousel**: Continuous drag-free Embla carousel featuring progress indicator, hover video playback, and 3D card flip on desktop.
+- **What We Do Interactive Cards**: Discipline containers (Services, Clients, Athletes) with corner registration marks and scrubbed rotation animation.
+- **Interactive 3D Globe**: Dot-based Fibonacci sphere with interactive touch/mouse drag inertia, momentum decay, and fallback to CSS gradient on low-end devices or reduced motion.
+- **Accessible Contact Modal & Mobile Menu**: Modal dialogs with keyboard focus trapping, Escape key closing, visible focus states, and one-click copy-to-clipboard email functionality.
+
+## 🛠 Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router, TypeScript, React 19)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) with fluid typography and responsive design tokens
@@ -19,9 +31,21 @@ A high-fidelity layout, animation, and WebGL interaction engineering study inspi
 - **Carousel**: [Embla Carousel](https://www.embla-carousel.com/) (free-drag continuous loop with progress bar and 3D card flip)
 - **State Management**: [Zustand](https://github.com/pmndrs/zustand) (preloader load sync, view toggle, mobile menu, contact modal)
 
----
+## 💡 What I Learned
 
-## 🚀 Getting Started & Run Steps
+- **Scroll & WebGL Synchronization**: Coordinating continuous virtual scrolling via Lenis with Three.js rendering loops and GSAP ScrollTrigger timelines on a single unified requestAnimationFrame ticker without frame drops or jitter.
+- **Advanced Three.js Shader Modification**: Customizing `MeshPhysicalMaterial` via `onBeforeCompile` to inject Fresnel rim glow and tuning procedural environment maps (PMREMGenerator with RoomEnvironment) for realistic translucent ruby glass.
+- **Responsive Fluid Design Tokens**: Translating complex editorial designs into scalable CSS custom properties using `clamp()` and viewport units without sacrificing typographical clarity across mobile (390px), tablet (768px), and desktop displays (1440px+).
+- **Accessibility in Creative Web**: Ensuring heavily animated, WebGL-driven sites remain fully accessible by supporting `prefers-reduced-motion`, ARIA dialog patterns, keyboard focus traps, visible focus rings, and proper color contrast ratios.
+
+## 🔀 Differences from the Original
+
+- **Simplified Self-Written WebGL**: Rather than relying on proprietary 3D models and proprietary shaders, the WebGL layer uses custom procedural low-poly geometry with displacement shaders, a procedural room environment, and a mathematical Fibonacci point-cloud globe.
+- **Free Substitute Fonts**: Replaced commercial fonts Futura and Univers Condensed with open Google Fonts `Jost` and `Barlow Condensed`, calibrated with matched tracking, line heights, and optical sizing.
+- **Custom Ruby-Colored Hero Rock**: The hero rock-podium is customized with a deep translucent ruby glass material featuring refraction, thickness attenuation, and crystal-like Fresnel facet glints instead of the original neutral grey stone.
+- **100% Free / Independent Assets**: All photographs and video clips are sourced under free-to-use licenses (Creative Commons, Public Domain, Pexels) or custom photographic prompts, with zero assets taken from `podium.global`.
+
+## 💻 Run Locally
 
 ### Prerequisites
 - Node.js 18+ (tested on Node.js 20 & 22+)
@@ -49,23 +73,11 @@ npm run start
 npm run lint
 ```
 
----
+## 📄 License
 
-## 📷 Media & Image Credits
+The code is MIT-licensed (see [LICENSE](LICENSE)). Photos and videos keep their own licenses, as listed in [public/images/CREDITS.md](public/images/CREDITS.md).
 
-All image assets used in this project are authentic documentary sports and film production photographs licensed under permissive free-to-use licenses (Creative Commons, Public Domain, Pexels License) or generated originally with custom photographic prompts. None of the images are sourced from `podium.global` or any commercial studio site.
+## 📷 Credits
 
-For a full breakdown of every image asset, creator, source URL, and license, see the comprehensive [Image Credits Documentation](/public/images/CREDITS.md).
-
----
-
-## 📐 Key Architecture & Interactions
-
-1. **Preloader**: Fullscreen curtain with centered indicator circle and 0–100% counter lerped via requestAnimationFrame (0.06 factor). Respects `prefers-reduced-motion`.
-2. **Fixed Reactive Header**: Transitions dynamically between dark and light color tokens across section boundaries (`#hero`, `#work`, `#about`, `#worldwide`) via GSAP ScrollTrigger.
-3. **Hero & WebGL Mosaic**: Procedural rock-podium geometry displaced via custom normal shaders, smoothly interpolating to an unfolding 12-plane mosaic scroll track over `300svh`.
-4. **Work Grid & View Toggle**: Responsive columns (4 desktop / 3 tablet / 1 mobile) with per-column parallax drift, cursor spotlight halo, and hover video previews. Fixed floating pill toggles between grid layout and full-screen project list index with dashed pixel dividers.
-5. **Behind the Scenes**: Drag-free Embla carousel with live scroll progress indicator, subtle image parallax, and 3D card flip on desktop.
-6. **What We Do**: Three discipline containers (Services, Clients, Athletes) with corner registration dots and scrubbed rotation (-6° to 0°).
-7. **Interactive 3D Globe**: Fibonacci-distributed 1,400-point dot sphere with touch/mouse drag rotation, momentum decay damping, and fallback to CSS gradient on low-end devices or reduced motion.
-8. **Contact Modal & Mobile Menu**: Accessible dialogs featuring focus trapping, Escape key closing, visible focus indicators, and clipboard email copying with reactive status feedback.
+- **Inspiration**: Visual and interaction design study inspired by [Podium](https://podium.global/).
+- **Media & Assets**: Authentic documentary sports and production photographs and video clips licensed under Creative Commons, Public Domain, and Pexels License. Full asset-by-asset attributions, creators, and source links are documented in [public/images/CREDITS.md](public/images/CREDITS.md).
