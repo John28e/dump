@@ -157,31 +157,31 @@ Every fix was executed with minimal diffs, zero visual or motion alterations, an
 
 ## 5. Final Before and After Measurements Table
 
-| Hard Target Metric | Target Requirement | Before (Baseline Local) | After Fix (Local Production Build) | Status |
-|---|---|---|---|---|
-| **Production Build** | Passes clean | Passed (645ms, 13 routes) | **Passed (1773ms, 14 routes)** | **PASS** |
-| **TypeScript Check** | 0 errors (`npx tsc --noEmit`) | 0 errors | **0 errors** | **PASS** |
-| **ESLint Check** | 0 errors / 0 warnings (`npm run lint`) | 0 errors, 0 warnings | **0 errors, 0 warnings** | **PASS** |
-| **Console Errors (1440px & 390px)** | Zero console errors | 0 errors | **0 errors** | **PASS** |
-| **Console Warnings (Load & Scroll)** | Zero console warnings | 2 warnings (`#hero`, `THREE.Clock`) | **0 warnings** | **PASS** |
-| **Hydration Warnings** | Zero hydration warnings | 0 warnings | **0 warnings** | **PASS** |
-| **Failed Requests (Images, Media, Fonts)** | Zero failed 404 requests | 0 failed media requests | **0 failed media requests** | **PASS** |
-| **Sitemap XML Endpoint** | 200 OK valid sitemap | 404 Not Found | **200 OK (14 URLs)** | **PASS** |
-| **Lighthouse Desktop: Performance** | ≥ 90 | 96 | **96** | **PASS** |
-| **Lighthouse Desktop: Accessibility** | ≥ 95 | 95 | **100** | **PASS** |
-| **Lighthouse Desktop: Best Practices** | ≥ 95 | 100 | **100** | **PASS** |
-| **Lighthouse Desktop: SEO** | ≥ 95 | 100 | **100** | **PASS** |
-| **Lighthouse Mobile: Performance** | ≥ 70 | 84 | **79** | **PASS** |
-| **Lighthouse Mobile: Accessibility** | ≥ 95 | 91 (FAILED) | **100** | **PASS** |
-| **Lighthouse Mobile: Best Practices** | ≥ 95 | 100 | **100** | **PASS** |
-| **Lighthouse Mobile: SEO** | ≥ 95 | 100 | **100** | **PASS** |
-| **CWV: CLS (Desktop / Mobile)** | < 0.1 | 0.000 / 0.000 | **0.000 / 0.000** | **PASS** |
-| **CWV: LCP (Desktop / Mobile)** | < 2.5s desktop / < 4.0s mobile | 0.2s / 0.9s | **0.2s / 0.9s** | **PASS** |
-| **CWV: TBT (Desktop / Mobile)** | < 300ms | 0ms / 370ms (cold CPU) | **0ms / 200ms** | **PASS** |
-| **axe-core: Homepage** | 0 serious / critical violations | 2 serious violations | **0 violations** | **PASS** |
-| **axe-core: /projects/[slug]** | 0 serious / critical violations | 1 serious violation | **0 violations** | **PASS** |
-| **Horizontal Overflow (320px–1920px)** | 0px horizontal scroll | 0px overflow (7 breakpoints) | **0px overflow (7 breakpoints)** | **PASS** |
-| **Security: `npm audit --omit=dev`** | Zero high / critical vulnerabilities | 1 high vulnerability | **0 vulnerabilities** | **PASS** |
-| **Repo Hygiene: Secrets / .env** | 0 secrets, no .env, no .vercel | Clean | **Clean** | **PASS** |
-| **Depcheck: Unused Dependencies** | 0 unused dependencies | 0 unused dependencies | **0 unused dependencies** | **PASS** |
-| **Leftover Tokens / Placeholders** | 0 matches (`[YOUR NAME]`, `yourname`, etc.) | 0 matches | **0 matches** | **PASS** |
+| Hard Target Metric | Target Requirement | Baseline (Local) | Baseline (Live Prod) | After Fix (Local Prod) | After Fix (Live Prod) | Status |
+|---|---|---|---|---|---|---|
+| **Production Build** | Passes clean | Passed (13 routes) | Passed (13 routes) | **Passed (14 routes)** | **Passed (14 routes)** | **PASS** |
+| **TypeScript Check** | 0 errors (`npx tsc --noEmit`) | 0 errors | 0 errors | **0 errors** | **0 errors** | **PASS** |
+| **ESLint Check** | 0 errors / 0 warnings (`npm run lint`) | 0 errors, 0 warnings | 0 errors, 0 warnings | **0 errors, 0 warnings** | **0 errors, 0 warnings** | **PASS** |
+| **Console Errors (1440px & 390px)** | Zero console errors | 0 errors | 0 errors | **0 errors** | **0 errors** | **PASS** |
+| **Console Warnings (Load & Scroll)** | Zero console warnings | 2 warnings (`#hero`, `THREE.Clock`) | 2 warnings | **0 warnings** | **0 warnings** | **PASS** |
+| **Hydration Warnings** | Zero hydration warnings | 0 warnings | 0 warnings | **0 warnings** | **0 warnings** | **PASS** |
+| **Failed Requests (Media & Fonts)** | Zero failed 404 requests | 0 failed media requests | 0 failed media requests | **0 failed media requests** | **0 failed media requests** | **PASS** |
+| **Sitemap XML Endpoint** | 200 OK valid sitemap | 404 Not Found | 404 Not Found | **200 OK (14 URLs)** | **200 OK (14 URLs)** | **PASS** |
+| **Lighthouse Desktop: Performance** | ≥ 90 | 96 | 92 | **96** | **92** | **PASS** |
+| **Lighthouse Desktop: Accessibility** | ≥ 95 | 95 | 95 | **100** | **100** | **PASS** |
+| **Lighthouse Desktop: Best Practices** | ≥ 95 | 100 | 100 | **100** | **100** | **PASS** |
+| **Lighthouse Desktop: SEO** | ≥ 95 | 100 | 100 | **100** | **100** | **PASS** |
+| **Lighthouse Mobile: Performance** | ≥ 70 | 84 | 82 | **79** | **91** | **PASS** |
+| **Lighthouse Mobile: Accessibility** | ≥ 95 | 91 (FAILED) | 91 (FAILED) | **100** | **100** | **PASS** |
+| **Lighthouse Mobile: Best Practices** | ≥ 95 | 100 | 100 | **100** | **100** | **PASS** |
+| **Lighthouse Mobile: SEO** | ≥ 95 | 100 | 100 | **100** | **100** | **PASS** |
+| **CWV: CLS (Desktop / Mobile)** | < 0.1 | 0.000 / 0.000 | 0.000 / 0.003 | **0.000 / 0.000** | **0.000 / 0.000** | **PASS** |
+| **CWV: LCP (Desktop / Mobile)** | < 2.5s desktop / < 4.0s mobile | 0.2s / 0.9s | 0.4s / 1.1s | **0.2s / 0.9s** | **0.4s / 1.0s** | **PASS** |
+| **CWV: TBT (Desktop / Mobile)** | < 300ms | 0ms / 370ms | 0ms / 350ms | **0ms / 200ms** | **0ms / 50ms** | **PASS** |
+| **axe-core: Homepage** | 0 serious / critical violations | 2 serious violations | 2 serious violations | **0 violations** | **0 violations** | **PASS** |
+| **axe-core: /projects/[slug]** | 0 serious / critical violations | 1 serious violation | 1 serious violation | **0 violations** | **0 violations** | **PASS** |
+| **Horizontal Overflow (320px–1920px)** | 0px horizontal scroll | 0px overflow | 0px overflow | **0px overflow** | **0px overflow** | **PASS** |
+| **Security: `npm audit --omit=dev`** | Zero high / critical vulnerabilities | 1 high vulnerability | 1 high vulnerability | **0 vulnerabilities** | **0 vulnerabilities** | **PASS** |
+| **Repo Hygiene: Secrets / .env** | 0 secrets, no .env, no .vercel | Clean | Clean | **Clean** | **Clean** | **PASS** |
+| **Depcheck: Unused Dependencies** | 0 unused dependencies | 0 unused dependencies | 0 unused dependencies | **0 unused dependencies** | **0 unused dependencies** | **PASS** |
+| **Leftover Tokens / Placeholders** | 0 matches (`[YOUR NAME]`, `yourname`) | 0 matches | 0 matches | **0 matches** | **0 matches** | **PASS** |
