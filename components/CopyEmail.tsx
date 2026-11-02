@@ -17,7 +17,20 @@ export const CopyEmail: React.FC<CopyEmailProps> = ({ email, className = "", chi
       e.preventDefault();
       e.stopPropagation();
       try {
-        await navigator.clipboard.writeText(email);
+        if (navigator?.clipboard?.writeText) {
+          await navigator.clipboard.writeText(email);
+        } else {
+          const textArea = document.createElement("textarea");
+          textArea.value = email;
+          textArea.style.position = "fixed";
+          textArea.style.left = "-999999px";
+          textArea.style.top = "-999999px";
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          document.execCommand("copy");
+          textArea.remove();
+        }
       } catch {
         // Fallback / silent catch
       }
