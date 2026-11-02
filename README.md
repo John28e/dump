@@ -10,7 +10,7 @@ Live Deployment: [https://dump-pied.vercel.app](https://dump-pied.vercel.app)
 
 A single-page athletic production studio website with dynamic project subpages and rich creative interactions:
 
-- **Fullscreen Preloader**: Smooth 0–100% lerped progress counter with animated circular SVG indicator and respect for `prefers-reduced-motion`.
+- **Fullscreen Preloader**: Smooth 0–100% progress counter driven by ProgressiveFluxLoader with animated progress tracks, stage labels, and respect for `prefers-reduced-motion`.
 - **Fixed Reactive Navigation**: Header dynamically transitioning its color between dark and light tokens across section boundaries (`#hero`, `#work`, `#about`, `#worldwide`) via GSAP ScrollTrigger.
 - **Hero & 3D WebGL Canvas**: Procedural rock-podium geometry rendered with translucent ruby glass and custom Fresnel rim lighting, smoothly translating into an unfolding 12-plane image mosaic scroll track over `300svh`.
 - **Work Grid & Dynamic Project Routing**: Multi-column responsive work grid (4 desktop / 3 tablet / 1 mobile) with parallax card drift, hover video previews, and dedicated dynamic project pages (`/projects/[slug]`).
