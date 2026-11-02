@@ -59,7 +59,7 @@ All baseline values measured on local production build (`npm run build && npm ru
 | **Security: `npm audit --omit=dev`** | Zero high / critical vulnerabilities | 1 high vulnerability (`postcss <=8.5.22`) | 1 high vulnerability (`postcss <=8.5.22`) | **FAIL** (AUDIT-02) |
 | **Repo Hygiene: Secrets / .env** | 0 secrets, no .env, no .vercel | Clean (0 tracked secrets or .env files) | Clean | **PASS** |
 | **Depcheck: Unused Dependencies** | 0 unused dependencies | 0 unused dependencies | 0 unused dependencies | **PASS** |
-| **Leftover Tokens / Placeholders** | 0 matches (`[YOUR NAME]`, `yourname`, etc.) | 0 matches across entire codebase | 0 matches | **PASS** |
+| **Leftover Tokens / Placeholders** | 0 placeholder tokens remaining | 0 matches across entire codebase | 0 matches | **PASS** |
 
 ---
 
@@ -184,4 +184,4 @@ Every fix was executed with minimal diffs, zero visual or motion alterations, an
 | **Security: `npm audit --omit=dev`** | Zero high / critical vulnerabilities | 1 high vulnerability | 1 high vulnerability | **0 vulnerabilities** | **0 vulnerabilities** | **PASS** |
 | **Repo Hygiene: Secrets / .env** | 0 secrets, no .env, no .vercel | Clean | Clean | **Clean** | **Clean** | **PASS** |
 | **Depcheck: Unused Dependencies** | 0 unused dependencies | 0 unused dependencies | 0 unused dependencies | **0 unused dependencies** | **0 unused dependencies** | **PASS** |
-| **Leftover Tokens / Placeholders** | 0 matches (`[YOUR NAME]`, `yourname`) | 0 matches | 0 matches | **0 matches** | **0 matches** | **PASS** |
+| **Leftover Tokens / Placeholders** | 0 placeholder tokens remaining | 0 matches | 0 matches | **0 matches** | **0 matches** | **PASS** |

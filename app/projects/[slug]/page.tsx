@@ -1,10 +1,46 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PLACEHOLDER_PROJECTS, PLACEHOLDER_DATA } from "@/data/content";
 
+const SITE_URL = "https://dump-pied.vercel.app";
+
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const project = PLACEHOLDER_PROJECTS.find((p) => p.slug === slug);
+  if (!project) return {};
+
+  const projectUrl = `${SITE_URL}/projects/${project.slug}`;
+
+  return {
+    title: `${project.title} — ${PLACEHOLDER_DATA.brand}`,
+    description: project.description,
+    alternates: {
+      canonical: projectUrl,
+    },
+    openGraph: {
+      title: `${project.title} — ${PLACEHOLDER_DATA.brand}`,
+      description: project.description,
+      url: projectUrl,
+      images: [
+        {
+          url: `${SITE_URL}${project.imageUrl}`,
+          alt: project.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${project.title} — ${PLACEHOLDER_DATA.brand}`,
+      description: project.description,
+      images: [`${SITE_URL}${project.imageUrl}`],
+    },
+  };
 }
 
 export async function generateStaticParams() {

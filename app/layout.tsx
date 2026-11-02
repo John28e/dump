@@ -22,13 +22,15 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
+const SITE_URL = "https://dump-pied.vercel.app";
+
 export const metadata: Metadata = {
   title: "dump — Creative Direction & Athletic Production",
   description:
     "Creative direction and film production for movement, performance, and athleticism.",
-  metadataBase: new URL("https://dump-pied.vercel.app"),
+  metadataBase: new URL(SITE_URL),
   alternates: {
-    canonical: "/",
+    canonical: SITE_URL,
   },
   icons: {
     icon: [
@@ -43,13 +45,13 @@ export const metadata: Metadata = {
     title: "dump — Creative Direction & Athletic Production",
     description:
       "Creative direction and film production for movement, performance, and athleticism.",
-    url: "https://dump-pied.vercel.app",
+    url: SITE_URL,
     siteName: "dump",
     locale: "en_US",
     type: "website",
     images: [
       {
-        url: "/images/og/og-image.webp",
+        url: `${SITE_URL}/images/og/og-image.webp`,
         width: 1376,
         height: 722,
         alt: "Solo cyclist ascending mountain switchback at golden dawn",
@@ -61,7 +63,7 @@ export const metadata: Metadata = {
     title: "dump — Creative Direction & Athletic Production",
     description:
       "Creative direction and film production for movement, performance, and athleticism.",
-    images: ["/images/og/og-image.webp"],
+    images: [`${SITE_URL}/images/og/og-image.webp`],
   },
   robots: {
     index: true,
