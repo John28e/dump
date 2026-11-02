@@ -146,15 +146,13 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
   };
 
   return (
-    <div
+    <article
       ref={cardRef}
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
-      role="button"
-      tabIndex={0}
-      aria-label={`Behind the scenes item: ${item.title}`}
+      aria-label={`${item.title} — ${item.category}`}
       className="group flex-shrink-0 w-[280px] sm:w-[320px] md:w-[380px] select-none cursor-pointer rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
       style={{ perspective: "1000px" }}
     >
@@ -216,11 +214,20 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
               <span className="text-label text-white font-bold bg-black/60 px-2 py-1 uppercase tracking-wider">
                 {item.category}
               </span>
-              <span className="text-white text-xs bg-black/60 p-1 hidden md:block">
+              <button
+                type="button"
+                tabIndex={isFlipped ? -1 : 0}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleClick();
+                }}
+                className="text-white text-xs bg-black/60 p-1 hidden md:block rounded-sm pointer-events-auto cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                aria-label={`View details for ${item.title}`}
+              >
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path d="M6 1V11M1 6H11" stroke="currentColor" strokeWidth="1.5" />
                 </svg>
-              </span>
+              </button>
             </div>
 
             {/* Card Front Title */}
@@ -246,12 +253,13 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
               </span>
               <button
                 type="button"
+                tabIndex={isFlipped ? 0 : -1}
                 onClick={(e) => {
                   e.stopPropagation();
                   setIsFlipped(false);
                 }}
                 className="text-white/60 hover:text-white cursor-pointer p-1 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                aria-label="Close card details"
+                aria-label={`Close details for ${item.title}`}
               >
                 <svg
                   width="14"
@@ -284,6 +292,6 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
           </div>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
