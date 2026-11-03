@@ -25,9 +25,9 @@ export const viewport: Viewport = {
 const SITE_URL = "https://dump-pied.vercel.app";
 
 export const metadata: Metadata = {
-  title: "dump — Creative Direction & Athletic Production",
+  title: "dump — Brand & Website Studio for Startups",
   description:
-    "Creative direction and film production for movement, performance, and athleticism.",
+    "A small studio for early-stage startups: brand strategy, visual identity, web design and development, from first workshop to launch day.",
   metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: SITE_URL,
@@ -42,9 +42,9 @@ export const metadata: Metadata = {
     apple: "/favicon.svg",
   },
   openGraph: {
-    title: "dump — Creative Direction & Athletic Production",
+    title: "dump — Brand & Website Studio for Startups",
     description:
-      "Creative direction and film production for movement, performance, and athleticism.",
+      "A small studio for early-stage startups: brand strategy, visual identity, web design and development, from first workshop to launch day.",
     url: SITE_URL,
     siteName: "dump",
     locale: "en_US",
@@ -54,15 +54,15 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/images/og/og-image.webp`,
         width: 1376,
         height: 722,
-        alt: "Solo cyclist ascending mountain switchback at golden dawn",
+        alt: "A designer's desk with a brand board, color swatches, and a laptop showing a website layout",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "dump — Creative Direction & Athletic Production",
+    title: "dump — Brand & Website Studio for Startups",
     description:
-      "Creative direction and film production for movement, performance, and athleticism.",
+      "A small studio for early-stage startups: brand strategy, visual identity, web design and development, from first workshop to launch day.",
     images: [`${SITE_URL}/images/og/og-image.webp`],
   },
   robots: {
