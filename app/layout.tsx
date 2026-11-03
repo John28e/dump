@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 const SITE_URL = "https://dump-pied.vercel.app";
 
 export const metadata: Metadata = {
-  title: "dump — Brand & Website Studio for Startups",
+  title: "identity — Brand & Website Studio for Startups",
   description:
     "A small studio for early-stage startups: brand strategy, visual identity, web design and development, from first workshop to launch day.",
   metadataBase: new URL(SITE_URL),
@@ -42,11 +42,11 @@ export const metadata: Metadata = {
     apple: "/favicon.svg",
   },
   openGraph: {
-    title: "dump — Brand & Website Studio for Startups",
+    title: "identity — Brand & Website Studio for Startups",
     description:
       "A small studio for early-stage startups: brand strategy, visual identity, web design and development, from first workshop to launch day.",
     url: SITE_URL,
-    siteName: "dump",
+    siteName: "identity",
     locale: "en_US",
     type: "website",
     images: [
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "dump — Brand & Website Studio for Startups",
+    title: "identity — Brand & Website Studio for Startups",
     description:
       "A small studio for early-stage startups: brand strategy, visual identity, web design and development, from first workshop to launch day.",
     images: [`${SITE_URL}/images/og/og-image.webp`],

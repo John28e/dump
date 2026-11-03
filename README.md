@@ -1,6 +1,6 @@
-# dump — Brand & Website Studio for Startups
+# identity — Brand & Website Studio for Startups
 
-`dump` is a creative development and design engineering study rebuilt as a front-end learning project, with placeholder content and no assets taken from any third-party source. It explores advanced creative development patterns on the modern web—including synchronized WebGL 3D scenes, fluid responsive typography, momentum scrolling with Lenis and GSAP ScrollTrigger, and accessible interactive UI components.
+`identity` is a creative development and design engineering study rebuilt as a front-end learning project, with placeholder content and no assets taken from any third-party source. It explores advanced creative development patterns on the modern web—including synchronized WebGL 3D scenes, fluid responsive typography, momentum scrolling with Lenis and GSAP ScrollTrigger, and accessible interactive UI components.
 
 ## 🔗 Live Demo
 

@@ -6,10 +6,10 @@ import { useAppStore } from "@/lib/store";
 import { CopyEmail } from "./CopyEmail";
 
 const CONTACT_EMAILS = [
-  { label: "Projects", email: "projects@dump.example" },
-  { label: "Partnerships", email: "partnerships@dump.example" },
-  { label: "General", email: "general@dump.example" },
-  { label: "Invoicing", email: "invoicing@dump.example" },
+  { label: "Projects", email: "projects@identity.example" },
+  { label: "Partnerships", email: "partnerships@identity.example" },
+  { label: "General", email: "general@identity.example" },
+  { label: "Invoicing", email: "invoicing@identity.example" },
 ];
 
 export const ContactModal: React.FC = () => {
@@ -328,7 +328,7 @@ export const ContactModal: React.FC = () => {
             {/* Studio Address & Socials */}
             <div className="md:col-span-2 flex flex-col justify-between gap-6 text-left">
               <div className="text-body-md text-black leading-relaxed">
-                <p className="font-bold tracking-tight uppercase">STUDIO DUMP</p>
+                <p className="font-bold tracking-tight uppercase">STUDIO IDENTITY</p>
                 <p>BY APPOINTMENT</p>
                 <p>KOCHI, KERALA</p>
                 <p className="font-bold text-xs text-gray-500 mt-1 uppercase">INDIA</p>

@@ -1,6 +1,6 @@
 # Media Credits and Attributions
 
-All photographs and video clips used in `dump` are authentic, high-resolution creative studio and technical production assets licensed for free commercial and editorial use under the Unsplash License (free to download, modify, and use without required attribution).
+All photographs and video clips used in `identity` are authentic, high-resolution creative studio and technical production assets licensed for free commercial and editorial use under the Unsplash License (free to download, modify, and use without required attribution).
 
 ## Featured Work Assets (8 Projects)
 

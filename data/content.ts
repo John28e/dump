@@ -347,7 +347,7 @@ export const PLACEHOLDER_BTS: BtsCardItem[] = [
 ];
 
 export const PLACEHOLDER_DATA = {
-  brand: "dump",
+  brand: "identity",
   hero: {
     tagline: "We build brands and websites that help startups get taken seriously.",
     hint: "Scroll Down",
@@ -393,17 +393,17 @@ export const PLACEHOLDER_DATA = {
   contact: {
     heading: "Open for new projects",
     address: {
-      line1: "STUDIO DUMP",
+      line1: "STUDIO IDENTITY",
       line2: "BY APPOINTMENT",
       line3: "KOCHI, KERALA",
       country: "INDIA",
     },
     // 4 email rows
     emails: [
-      { label: "Projects", email: "projects@dump.example" },
-      { label: "Partnerships", email: "partnerships@dump.example" },
-      { label: "General", email: "general@dump.example" },
-      { label: "Invoicing", email: "invoicing@dump.example" },
+      { label: "Projects", email: "projects@identity.example" },
+      { label: "Partnerships", email: "partnerships@identity.example" },
+      { label: "General", email: "general@identity.example" },
+      { label: "Invoicing", email: "invoicing@identity.example" },
     ],
     socials: [
       { name: "Instagram", url: "#" },
@@ -412,8 +412,8 @@ export const PLACEHOLDER_DATA = {
     ],
   },
   footer: {
-    copyright: "©dump 2026. CONCEPT PROJECT, ALL NAMES FICTIONAL.",
-    email: "hello@dump.example",
-    credit: "Website by dump",
+    copyright: "©identity 2026. CONCEPT PROJECT, ALL NAMES FICTIONAL.",
+    email: "hello@identity.example",
+    credit: "Website by identity",
   },
 };
