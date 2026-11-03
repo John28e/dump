@@ -43,12 +43,12 @@ const HERO_ROCK_MAIN_LIGHT_COLOR = "#d61836"; // Key light color for top facet s
 const HERO_ROCK_MAIN_LIGHT_INTENSITY = 1.2; // Key light intensity for crystal facet shine
 
 // ============================================================================
-// HERO ROCK SHATTER & MOSAIC CONSTANTS
+// HERO ROCK SHATTER & IDENTITY TYPOGRAPHY CONSTANTS
 // ============================================================================
 const SHATTER_PHASE_HOLD = 0.10; // 0.00-0.10: Hold unbroken rock shape; hairline crack flash near 0.08
 const SHATTER_PHASE_SCATTER = 0.50; // 0.10-0.50: 3D scatter, tumble, outward arc with depth variation
-const SHATTER_PHASE_GATHER = 0.90; // 0.50-0.90: Steer toward mosaic slots, rotate flat, crossfade to photo
-const SHATTER_PHASE_SETTLE = 1.00; // 0.90-1.00: Settle into crisp flat mosaic; hand-off into work
+const SHATTER_PHASE_GATHER = 0.88; // 0.50-0.88: Steer toward IDENTITY letter coordinates, rotate flat
+const SHATTER_PHASE_SETTLE = 1.00; // 0.88-1.00: Settle into crisp crystal typography with specular sweep
 
 const SHATTER_TARGET_COUNT_DESKTOP = 220; // Target piece count on desktop (M = 220)
 const SHATTER_TARGET_COUNT_MOBILE = 180; // Target piece count on mobile (M = 180)
@@ -58,22 +58,6 @@ const SHATTER_MAX_TUMBLE_RAD = Math.PI * 3.5; // Maximum tumble rotation in radi
 const SHATTER_STAGGER_SPREAD = 0.12; // Per-shard burst stagger spread across progress
 const SHATTER_GAP_SCALE = 0.985; // Slight shard inset so hairline cracks between landed pieces remain readable
 const SHATTER_SWAP_THRESHOLD = 0.004; // Seamless transition threshold between rockMesh and shardsGroup
-
-// 12 Mosaic Image URLs in sequential order
-const MOSAIC_IMAGE_URLS = [
-  "/images/mosaic/mosaic-01-brand-board.webp",
-  "/images/mosaic/mosaic-02-stationery.webp",
-  "/images/mosaic/mosaic-03-packaging.webp",
-  "/images/mosaic/mosaic-04-phone-mockup.webp",
-  "/images/mosaic/mosaic-05-payments-app.webp",
-  "/images/mosaic/mosaic-06-tea-storefront.webp",
-  "/images/mosaic/mosaic-07-devtool-docs.webp",
-  "/images/mosaic/mosaic-08-homecare-booking.webp",
-  "/images/mosaic/mosaic-09-ai-infrastructure.webp",
-  "/images/mosaic/mosaic-10-agritech-platform.webp",
-  "/images/mosaic/mosaic-11-course-learning.webp",
-  "/images/mosaic/mosaic-12-mobility-transit.webp",
-];
 
 // Utility: check WebGL support safely
 function checkWebGLSupport(): boolean {
@@ -199,79 +183,220 @@ function buildRockGeometry(): THREE.BufferGeometry {
   return rockGeo;
 }
 
-// Helper: Pack 12 mosaic images into a 4x3 texture atlas canvas
-function loadAndBuildTextureAtlas(
-  urls: string[],
-  isMobile: boolean,
-  maxAnisotropy: number
-): { texture: THREE.CanvasTexture; canvas: HTMLCanvasElement } {
-  const atlasWidth = isMobile ? 2048 : 4096;
-  const atlasHeight = isMobile ? 2048 : 4096;
-  const canvas = document.createElement("canvas");
-  canvas.width = atlasWidth;
-  canvas.height = atlasHeight;
-  const ctx = canvas.getContext("2d");
-  if (ctx) {
-    ctx.fillStyle = "#111111";
-    ctx.fillRect(0, 0, atlasWidth, atlasHeight);
+// Helper: Generate precision typographic letterforms for "IDENTITY" and triangulate
+function generateIdentityTriangles(
+  targetCount: number,
+  _isVertical: boolean
+): { triangles: [THREE.Vector2, THREE.Vector2, THREE.Vector2][]; width: number; height: number } {
+  function makeI(x: number, y: number, w: number, h: number, s: THREE.Shape) {
+    s.moveTo(x, y);
+    s.lineTo(x + w, y);
+    s.lineTo(x + w, y + h);
+    s.lineTo(x, y + h);
+    s.closePath();
   }
 
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.minFilter = THREE.LinearMipmapLinearFilter;
-  texture.magFilter = THREE.LinearFilter;
-  texture.generateMipmaps = true;
-  texture.anisotropy = Math.min(maxAnisotropy, 4);
+  function makeD(x: number, y: number, w: number, h: number, s: THREE.Shape) {
+    const stem = w * 0.36;
+    s.moveTo(x, y);
+    s.lineTo(x + w * 0.48, y);
+    s.bezierCurveTo(
+      x + w * 1.02,
+      y + h * 0.08,
+      x + w * 1.02,
+      y + h * 0.92,
+      x + w * 0.48,
+      y + h
+    );
+    s.lineTo(x, y + h);
+    s.closePath();
 
-  const colWidth = atlasWidth / 4;
-  const rowHeight = atlasHeight / 3;
+    const hole = new THREE.Path();
+    hole.moveTo(x + stem, y + h * 0.20);
+    hole.lineTo(x + w * 0.45, y + h * 0.20);
+    hole.bezierCurveTo(
+      x + w * 0.68,
+      y + h * 0.26,
+      x + w * 0.68,
+      y + h * 0.74,
+      x + w * 0.45,
+      y + h * 0.80
+    );
+    hole.lineTo(x + stem, y + h * 0.80);
+    hole.closePath();
+    s.holes.push(hole);
+  }
 
-  urls.forEach((url, index) => {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      if (!ctx) return;
-      const col = index % 4;
-      const row = Math.floor(index / 4);
-      const slotX = col * colWidth;
-      const slotY = row * rowHeight;
+  function makeE(x: number, y: number, w: number, h: number, s: THREE.Shape) {
+    const barH = h * 0.18;
+    const stemW = w * 0.38;
+    s.moveTo(x, y);
+    s.lineTo(x + w, y);
+    s.lineTo(x + w, y + barH);
+    s.lineTo(x + stemW, y + barH);
+    s.lineTo(x + stemW, y + h * 0.41);
+    s.lineTo(x + w * 0.86, y + h * 0.41);
+    s.lineTo(x + w * 0.86, y + h * 0.59);
+    s.lineTo(x + stemW, y + h * 0.59);
+    s.lineTo(x + stemW, y + h - barH);
+    s.lineTo(x + w, y + h - barH);
+    s.lineTo(x + w, y + h);
+    s.lineTo(x, y + h);
+    s.closePath();
+  }
 
-      // Cover crop into the slot
-      const imgAspect = img.width / img.height;
-      const slotAspect = colWidth / rowHeight;
-      let sWidth = img.width;
-      let sHeight = img.height;
-      let sx = 0;
-      let sy = 0;
+  function makeN(x: number, y: number, w: number, h: number, s: THREE.Shape) {
+    const stemW = w * 0.34;
+    s.moveTo(x, y);
+    s.lineTo(x + stemW, y);
+    s.lineTo(x + w - stemW, y + h * 0.38);
+    s.lineTo(x + w - stemW, y);
+    s.lineTo(x + w, y);
+    s.lineTo(x + w, y + h);
+    s.lineTo(x + w - stemW, y + h);
+    s.lineTo(x + stemW, y + h * 0.62);
+    s.lineTo(x + stemW, y + h);
+    s.lineTo(x, y + h);
+    s.closePath();
+  }
 
-      if (imgAspect > slotAspect) {
-        sWidth = img.height * slotAspect;
-        sx = (img.width - sWidth) / 2;
-      } else {
-        sHeight = img.width / slotAspect;
-        sy = (img.height - sHeight) / 2;
-      }
+  function makeT(x: number, y: number, w: number, h: number, s: THREE.Shape) {
+    const barH = h * 0.18;
+    const stemW = w * 0.38;
+    const stemX = x + (w - stemW) / 2;
+    s.moveTo(x, y + h - barH);
+    s.lineTo(stemX, y + h - barH);
+    s.lineTo(stemX, y);
+    s.lineTo(stemX + stemW, y);
+    s.lineTo(stemX + stemW, y + h - barH);
+    s.lineTo(x + w, y + h - barH);
+    s.lineTo(x + w, y + h);
+    s.lineTo(x, y + h);
+    s.closePath();
+  }
 
-      ctx.drawImage(
-        img,
-        sx,
-        sy,
-        sWidth,
-        sHeight,
-        slotX,
-        slotY,
-        colWidth,
-        rowHeight
-      );
-      texture.needsUpdate = true;
-    };
-    img.src = url;
+  function makeY(x: number, y: number, w: number, h: number, s: THREE.Shape) {
+    const stemW = w * 0.36;
+    const stemX = x + (w - stemW) / 2;
+    const armW = w * 0.32;
+    s.moveTo(stemX, y);
+    s.lineTo(stemX + stemW, y);
+    s.lineTo(stemX + stemW, y + h * 0.44);
+    s.lineTo(x + w, y + h);
+    s.lineTo(x + w - armW, y + h);
+    s.lineTo(x + w * 0.5, y + h * 0.60);
+    s.lineTo(x + armW, y + h);
+    s.lineTo(x, y + h);
+    s.lineTo(stemX, y + h * 0.44);
+    s.closePath();
+  }
+
+  const h = 1.0;
+  const gap = 0.09;
+  const letters = [
+    { fn: makeI, w: 0.22 },
+    { fn: makeD, w: 0.54 },
+    { fn: makeE, w: 0.46 },
+    { fn: makeN, w: 0.54 },
+    { fn: makeT, w: 0.48 },
+    { fn: makeI, w: 0.22 },
+    { fn: makeT, w: 0.48 },
+    { fn: makeY, w: 0.50 },
+  ];
+
+  let totalW = 0;
+  letters.forEach((l, i) => {
+    totalW += l.w + (i < letters.length - 1 ? gap : 0);
   });
 
-  return { texture, canvas };
+  const startX = -totalW / 2;
+  const startY = -h / 2;
+  let curX = startX;
+
+  const initialTris: {
+    tri: [THREE.Vector2, THREE.Vector2, THREE.Vector2];
+    area: number;
+  }[] = [];
+
+  letters.forEach((l) => {
+    const s = new THREE.Shape();
+    l.fn(curX, startY, l.w, h, s);
+    curX += l.w + gap;
+
+    const rawGeo = new THREE.ShapeGeometry(s, 6);
+    const geo = rawGeo.toNonIndexed();
+    rawGeo.dispose();
+    const pos = geo.getAttribute("position");
+    for (let i = 0; i < pos.count; i += 3) {
+      const p0 = new THREE.Vector2(pos.getX(i), pos.getY(i));
+      const p1 = new THREE.Vector2(pos.getX(i + 1), pos.getY(i + 1));
+      const p2 = new THREE.Vector2(pos.getX(i + 2), pos.getY(i + 2));
+      const area =
+        Math.abs(
+          (p1.x - p0.x) * (p2.y - p0.y) - (p2.x - p0.x) * (p1.y - p0.y)
+        ) * 0.5;
+      initialTris.push({ tri: [p0, p1, p2], area });
+    }
+    geo.dispose();
+  });
+
+  // Priority-based subdivision along longest edges until target facet count is reached
+  const pool = [...initialTris];
+  while (pool.length < targetCount) {
+    let maxIdx = 0;
+    let maxArea = pool[0].area;
+    for (let i = 1; i < pool.length; i++) {
+      if (pool[i].area > maxArea) {
+        maxArea = pool[i].area;
+        maxIdx = i;
+      }
+    }
+    const [t] = pool.splice(maxIdx, 1);
+    const [p0, p1, p2] = t.tri;
+
+    const d01 = p0.distanceToSquared(p1);
+    const d12 = p1.distanceToSquared(p2);
+    const d20 = p2.distanceToSquared(p0);
+
+    let vA: THREE.Vector2, vB: THREE.Vector2, vOpp: THREE.Vector2;
+    if (d01 >= d12 && d01 >= d20) {
+      vA = p0;
+      vB = p1;
+      vOpp = p2;
+    } else if (d12 >= d01 && d12 >= d20) {
+      vA = p1;
+      vB = p2;
+      vOpp = p0;
+    } else {
+      vA = p2;
+      vB = p0;
+      vOpp = p1;
+    }
+
+    const mid = new THREE.Vector2().addVectors(vA, vB).multiplyScalar(0.5);
+    const a1 =
+      Math.abs(
+        (vA.x - vOpp.x) * (mid.y - vOpp.y) -
+          (mid.x - vOpp.x) * (vA.y - vOpp.y)
+      ) * 0.5;
+    const a2 =
+      Math.abs(
+        (vB.x - vOpp.x) * (mid.y - vOpp.y) -
+          (mid.x - vOpp.x) * (vB.y - vOpp.y)
+      ) * 0.5;
+
+    pool.push({ tri: [vOpp, vA, mid], area: a1 });
+    pool.push({ tri: [vOpp, mid, vB], area: a2 });
+  }
+
+  return {
+    triangles: pool.map((x) => x.tri),
+    width: totalW,
+    height: h,
+  };
 }
 
-// Build non-indexed Shard BufferGeometry with target mosaic layout & attributes
+// Build non-indexed Shard BufferGeometry with target IDENTITY typography layout & attributes
 function buildShatterGeometry(
   isVertical: boolean,
   isMobile: boolean,
@@ -356,7 +481,7 @@ function buildShatterGeometry(
     finalRockTriangles = rockTriangles.map((t) => [t.a, t.b, t.c]);
   }
 
-  // Compute World Frustum Bounds for Mosaic at z = 0.0 with Camera at z = cameraD (3.2)
+  // Compute World Frustum Bounds for IDENTITY at z = 0.0 with Camera at z = cameraD (3.2)
   const fov = (45 * Math.PI) / 180;
   const fH = 2 * cameraD * Math.tan(fov / 2);
   const aspect =
@@ -366,120 +491,47 @@ function buildShatterGeometry(
       ? 0.56
       : 1.6;
   const fW = fH * aspect;
-  const mosaicW = isVertical ? fW * 0.92 : Math.min(fW * 0.90, 4.8);
-  const mosaicH = isVertical
-    ? Math.min(fH * 0.82, mosaicW * 1.5)
-    : Math.min(fH * 0.88, 2.4);
 
-  // Generate Jittered Organic Triangulation Grid covering mosaic bounds
-  const cols = isVertical ? 9 : 11;
-  const rows = 10;
-  const rand = createPseudoRandom(SHATTER_RANDOM_SEED);
+  // Generate IDENTITY typographic facet mesh
+  const identityData = generateIdentityTriangles(targetCount, isVertical);
+  const targetW = isVertical ? fW * 0.92 : Math.min(fW * 0.88, 4.4);
+  const wordScale = targetW / identityData.width;
 
-  const gridVerts: THREE.Vector2[][] = [];
-  for (let j = 0; j <= rows; j++) {
-    gridVerts[j] = [];
-    for (let i = 0; i <= cols; i++) {
-      const u = i / cols;
-      const v = j / rows;
-      let x = -mosaicW / 2 + u * mosaicW;
-      let y = -mosaicH / 2 + v * mosaicH;
-      if (i > 0 && i < cols && j > 0 && j < rows) {
-        x += (rand() - 0.5) * (mosaicW / cols) * 0.7;
-        y += (rand() - 0.5) * (mosaicH / rows) * 0.7;
-      }
-      gridVerts[j][i] = new THREE.Vector2(x, y);
-    }
-  }
+  const targetTriangles: [THREE.Vector3, THREE.Vector3, THREE.Vector3][] =
+    identityData.triangles.map((tri) => [
+      new THREE.Vector3(tri[0].x * wordScale, tri[0].y * wordScale, 0.0),
+      new THREE.Vector3(tri[1].x * wordScale, tri[1].y * wordScale, 0.0),
+      new THREE.Vector3(tri[2].x * wordScale, tri[2].y * wordScale, 0.0),
+    ]);
 
-  const mosaicTriangles: [THREE.Vector2, THREE.Vector2, THREE.Vector2][] = [];
-  for (let j = 0; j < rows; j++) {
-    for (let i = 0; i < cols; i++) {
-      const v00 = gridVerts[j][i];
-      const v10 = gridVerts[j][i + 1];
-      const v11 = gridVerts[j + 1][i + 1];
-      const v01 = gridVerts[j + 1][i];
-      if (rand() > 0.5) {
-        mosaicTriangles.push([v00, v10, v11]);
-        mosaicTriangles.push([v00, v11, v01]);
-      } else {
-        mosaicTriangles.push([v00, v10, v01]);
-        mosaicTriangles.push([v10, v11, v01]);
-      }
-    }
-  }
-
-  // 12 Photo Seeds for Voronoi Clustering (4x3 in landscape, 3x4 in portrait)
-  const seedCols = isVertical ? 3 : 4;
-  const seedRows = isVertical ? 4 : 3;
-  const photoSeeds: { x: number; y: number; id: number }[] = [];
-  for (let r = 0; r < seedRows; r++) {
-    for (let c = 0; c < seedCols; c++) {
-      const sx = -mosaicW / 2 + (c + 0.5) * (mosaicW / seedCols);
-      const sy = mosaicH / 2 - (r + 0.5) * (mosaicH / seedRows);
-      photoSeeds.push({ x: sx, y: sy, id: r * seedCols + c });
-    }
-  }
-
-  const triCellMap: number[] = [];
-  const cellBounds = Array.from({ length: 12 }, () => ({
-    minX: Infinity,
-    maxX: -Infinity,
-    minY: Infinity,
-    maxY: -Infinity,
-  }));
-
-  mosaicTriangles.forEach((tri, mIdx) => {
-    const cx = (tri[0].x + tri[1].x + tri[2].x) / 3;
-    const cy = (tri[0].y + tri[1].y + tri[2].y) / 3;
-    let minDist = Infinity;
-    let bestCell = 0;
-    photoSeeds.forEach((s, sIdx) => {
-      const dist = Math.hypot(cx - s.x, cy - s.y);
-      if (dist < minDist) {
-        minDist = dist;
-        bestCell = sIdx;
-      }
-    });
-    triCellMap[mIdx] = bestCell;
-    const b = cellBounds[bestCell];
-    for (let k = 0; k < 3; k++) {
-      b.minX = Math.min(b.minX, tri[k].x);
-      b.maxX = Math.max(b.maxX, tri[k].x);
-      b.minY = Math.min(b.minY, tri[k].y);
-      b.maxY = Math.max(b.maxY, tri[k].y);
-    }
-  });
-
-  // Centroids & Greedy Pair Matching (Rock Shard -> Mosaic Piece)
+  // Centroids & Greedy Pair Matching (Rock Shard -> Wordmark Letter Facet)
   const rockCentroids = finalRockTriangles.map((t) =>
     new THREE.Vector3().add(t[0]).add(t[1]).add(t[2]).multiplyScalar(1 / 3)
   );
-  const mosaicCentroids = mosaicTriangles.map((t) => ({
-    x: (t[0].x + t[1].x + t[2].x) / 3,
-    y: (t[0].y + t[1].y + t[2].y) / 3,
-  }));
+  const targetCentroids = targetTriangles.map((t) =>
+    new THREE.Vector3().add(t[0]).add(t[1]).add(t[2]).multiplyScalar(1 / 3)
+  );
 
-  const availableMosaic = new Set(mosaicTriangles.map((_, i) => i));
-  const rockToMosaic = new Array(finalRockTriangles.length);
+  const availableTarget = new Set(targetTriangles.map((_, i) => i));
+  const rockToTarget = new Array(finalRockTriangles.length);
 
   for (let rIdx = 0; rIdx < rockCentroids.length; rIdx++) {
     const rc = rockCentroids[rIdx];
-    let bestMIdx = -1;
+    let bestIdx = -1;
     let bestDist = Infinity;
-    for (const mIdx of availableMosaic) {
-      const mc = mosaicCentroids[mIdx];
-      const d = Math.hypot(rc.x - mc.x, rc.y - mc.y);
+    for (const tIdx of availableTarget) {
+      const tc = targetCentroids[tIdx];
+      const d = Math.hypot(rc.x - tc.x, rc.y - tc.y);
       if (d < bestDist) {
         bestDist = d;
-        bestMIdx = mIdx;
+        bestIdx = tIdx;
       }
     }
-    availableMosaic.delete(bestMIdx);
-    rockToMosaic[rIdx] = bestMIdx;
+    availableTarget.delete(bestIdx);
+    rockToTarget[rIdx] = bestIdx;
   }
 
-  // Construct Non-Indexed Shard Geometry Buffers
+  // Construct Non-Indexed Shard Geometry Buffers with Barycentric coordinates
   const M = finalRockTriangles.length;
   const positions = new Float32Array(M * 9);
   const normals = new Float32Array(M * 9);
@@ -488,17 +540,22 @@ function buildShatterGeometry(
   const aRestCentroid = new Float32Array(M * 9);
   const aTargetCentroid = new Float32Array(M * 9);
   const aShardParams = new Float32Array(M * 12);
-  const aAtlasUv = new Float32Array(M * 6);
+  const aBarycentric = new Float32Array(M * 9);
+
+  const rand = createPseudoRandom(SHATTER_RANDOM_SEED);
+  const baryVals = [
+    [1.0, 0.0, 0.0],
+    [0.0, 1.0, 0.0],
+    [0.0, 0.0, 1.0],
+  ];
 
   for (let rIdx = 0; rIdx < M; rIdx++) {
-    const mIdx = rockToMosaic[rIdx];
+    const tIdx = rockToTarget[rIdx];
     const rTri = finalRockTriangles[rIdx];
-    const mTri = mosaicTriangles[mIdx];
-    const cellId = triCellMap[mIdx];
-    const b = cellBounds[cellId];
+    const tTri = targetTriangles[tIdx];
 
     const rCentroid = rockCentroids[rIdx];
-    const mCentroid = mosaicCentroids[mIdx];
+    const tCentroid = targetCentroids[tIdx];
 
     const rEdge1 = new THREE.Vector3().subVectors(rTri[1], rTri[0]);
     const rEdge2 = new THREE.Vector3().subVectors(rTri[2], rTri[0]);
@@ -513,19 +570,10 @@ function buildShatterGeometry(
     const tumbleSpeed = 0.85 + rand() * 0.55;
     const depthOffset = (rand() - 0.5) * 1.0;
 
-    // Slot in 4x3 Atlas
-    const atlasCol = cellId % 4;
-    const atlasRow = Math.floor(cellId / 4);
-    const uMin = atlasCol / 4;
-    const uMax = (atlasCol + 1) / 4;
-    const vMin = (2 - atlasRow) / 3;
-    const vMax = (3 - atlasRow) / 3;
-
     for (let k = 0; k < 3; k++) {
       const vIdx = rIdx * 3 + k;
       const i3 = vIdx * 3;
       const i4 = vIdx * 4;
-      const i2 = vIdx * 2;
 
       positions[i3] = rTri[k].x;
       positions[i3 + 1] = rTri[k].y;
@@ -535,8 +583,8 @@ function buildShatterGeometry(
       normals[i3 + 1] = rNorm.y;
       normals[i3 + 2] = rNorm.z;
 
-      aTargetPos[i3] = mTri[k].x;
-      aTargetPos[i3 + 1] = mTri[k].y;
+      aTargetPos[i3] = tTri[k].x;
+      aTargetPos[i3 + 1] = tTri[k].y;
       aTargetPos[i3 + 2] = 0.0;
 
       aTargetNormal[i3] = 0.0;
@@ -547,8 +595,8 @@ function buildShatterGeometry(
       aRestCentroid[i3 + 1] = rCentroid.y;
       aRestCentroid[i3 + 2] = rCentroid.z;
 
-      aTargetCentroid[i3] = mCentroid.x;
-      aTargetCentroid[i3 + 1] = mCentroid.y;
+      aTargetCentroid[i3] = tCentroid.x;
+      aTargetCentroid[i3 + 1] = tCentroid.y;
       aTargetCentroid[i3 + 2] = 0.0;
 
       aShardParams[i4] = stagger;
@@ -556,13 +604,9 @@ function buildShatterGeometry(
       aShardParams[i4 + 2] = tumbleSpeed;
       aShardParams[i4 + 3] = depthOffset;
 
-      const cellW = Math.max(0.001, b.maxX - b.minX);
-      const cellH = Math.max(0.001, b.maxY - b.minY);
-      const nx = (mTri[k].x - b.minX) / cellW;
-      const ny = (mTri[k].y - b.minY) / cellH;
-
-      aAtlasUv[i2] = uMin + nx * (uMax - uMin);
-      aAtlasUv[i2 + 1] = vMin + ny * (vMax - vMin);
+      aBarycentric[i3] = baryVals[k][0];
+      aBarycentric[i3 + 1] = baryVals[k][1];
+      aBarycentric[i3 + 2] = baryVals[k][2];
     }
   }
 
@@ -577,7 +621,13 @@ function buildShatterGeometry(
     new THREE.BufferAttribute(aTargetCentroid, 3)
   );
   geo.setAttribute("aShardParams", new THREE.BufferAttribute(aShardParams, 4));
-  geo.setAttribute("aAtlasUv", new THREE.BufferAttribute(aAtlasUv, 2));
+  geo.setAttribute("aBarycentric", new THREE.BufferAttribute(aBarycentric, 3));
+
+  const halfW = (identityData.width * wordScale) / 2;
+  const halfH = (identityData.height * wordScale) / 2;
+  geo.userData = {
+    wordBounds: new THREE.Vector4(-halfW, halfW, -halfH, halfH),
+  };
 
   return geo;
 }
@@ -775,14 +825,8 @@ export const GlobalCanvas: React.FC = () => {
     heroGroup.add(mainLight);
 
     // ----------------------------------------------------
-    // B. SHATTERED ROCK & PHOTO MOSAIC TRANSITION
+    // B. SHATTERED ROCK & CRYSTAL "IDENTITY" WORDMARK
     // ----------------------------------------------------
-    const { texture: atlasTexture } = loadAndBuildTextureAtlas(
-      MOSAIC_IMAGE_URLS,
-      isMobileViewport,
-      renderer.capabilities.getMaxAnisotropy()
-    );
-
     // Build initial shatter geometry
     let currentShatterGeo = buildShatterGeometry(
       isVerticalViewport,
@@ -810,7 +854,7 @@ export const GlobalCanvas: React.FC = () => {
         attribute vec3 aRestCentroid;
         attribute vec3 aTargetCentroid;
         attribute vec4 aShardParams;
-        attribute vec2 aAtlasUv;
+        attribute vec3 aBarycentric;
 
         uniform float uProgress;
         uniform float uReducedMotion;
@@ -889,7 +933,7 @@ export const GlobalCanvas: React.FC = () => {
         vec3 finalRimColor = mix( rimBase, rimPeak, pow( rimFactor, 3.0 ) );
         outgoingLight += finalRimColor * ( rimFactor * ${HERO_ROCK_RIM_INTENSITY.toFixed(2)} );
 
-        // Crossfade: glass fades out as shard reaches final mosaic destination
+        // Crossfade: glass fades out as shard reaches final typography destination
         float glassFade = 1.0 - smoothstep(0.75, 0.98, vShardTravel);
         diffuseColor.a *= glassFade;
 
@@ -898,13 +942,14 @@ export const GlobalCanvas: React.FC = () => {
       );
     };
 
-    // Shard Photo Material (renders the cropped photo, landing glint, and ruby seam warmth)
-    const photoMaterial = new THREE.ShaderMaterial({
+    // Faceted Crystal "IDENTITY" Wordmark Material (Editorial NYC Aesthetic)
+    const identityTextMaterial = new THREE.ShaderMaterial({
       uniforms: {
-        uAtlas: { value: atlasTexture },
         uRubyColor: { value: new THREE.Color(HERO_ROCK_COLOR) },
         uProgress: shatterUniforms.uProgress,
         uReducedMotion: shatterUniforms.uReducedMotion,
+        uWordBounds: { value: currentShatterGeo.userData.wordBounds },
+        uTime: { value: 0 },
       },
       vertexShader: `
         attribute vec3 aTargetPos;
@@ -912,22 +957,25 @@ export const GlobalCanvas: React.FC = () => {
         attribute vec3 aRestCentroid;
         attribute vec3 aTargetCentroid;
         attribute vec4 aShardParams;
-        attribute vec2 aAtlasUv;
+        attribute vec3 aBarycentric;
 
         uniform float uProgress;
         uniform float uReducedMotion;
 
-        varying vec2 vAtlasUv;
+        varying vec3 vBarycentric;
         varying float vShardTravel;
         varying float vLandingGlint;
         varying vec3 vWorldNormal;
+        varying vec3 vWorldPos;
+        varying float vShardSeed;
 
         vec3 rotateVectorByAxis(vec3 v, vec3 axis, float angle) {
           return v * cos(angle) + cross(axis, v) * sin(angle) + axis * dot(axis, v) * (1.0 - cos(angle));
         }
 
         void main() {
-          vAtlasUv = aAtlasUv;
+          vBarycentric = aBarycentric;
+          vShardSeed = aShardParams.y;
 
           float p = clamp(uProgress, 0.0, 1.0);
           float stagger = aShardParams.x * ${SHATTER_STAGGER_SPREAD.toFixed(2)};
@@ -963,38 +1011,68 @@ export const GlobalCanvas: React.FC = () => {
           vec3 rotNorm = rotateVectorByAxis(normal, axis, tumbleAngle);
           vec3 finalNorm = normalize(mix(rotNorm, vec3(0.0, 0.0, 1.0), smoothstep(0.65, 0.95, smoothT)));
           vWorldNormal = normalize((modelMatrix * vec4(finalNorm, 0.0)).xyz);
+          vWorldPos = (modelMatrix * vec4(finalPos, 1.0)).xyz;
 
           // Landing glint flash on facet edges as shard lands
-          vLandingGlint = sin(clamp((smoothT - 0.88) / 0.12, 0.0, 1.0) * 3.14159265);
+          vLandingGlint = sin(clamp((smoothT - 0.82) / 0.18, 0.0, 1.0) * 3.14159265);
 
           vec4 mvPosition = modelViewMatrix * vec4(finalPos, 1.0);
           gl_Position = projectionMatrix * mvPosition;
         }
       `,
       fragmentShader: `
-        uniform sampler2D uAtlas;
         uniform vec3 uRubyColor;
-        varying vec2 vAtlasUv;
+        uniform float uProgress;
+        uniform vec4 uWordBounds;
+        uniform float uTime;
+
+        varying vec3 vBarycentric;
         varying float vShardTravel;
         varying float vLandingGlint;
         varying vec3 vWorldNormal;
+        varying vec3 vWorldPos;
+        varying float vShardSeed;
 
         void main() {
-          if (vShardTravel < 0.70) {
+          if (vShardTravel < 0.68) {
             discard;
           }
 
-          vec4 texColor = texture2D(uAtlas, vAtlasUv);
-          float photoFade = smoothstep(0.75, 0.98, vShardTravel);
+          float textFade = smoothstep(0.72, 0.94, vShardTravel);
 
-          // Crisp landing glint flash
-          vec3 rimGlint = vec3(1.0, 0.94, 0.96) * (vLandingGlint * 0.9);
+          float normX = clamp((vWorldPos.x - uWordBounds.x) / max(0.001, uWordBounds.y - uWordBounds.x), 0.0, 1.0);
+          float normY = clamp((vWorldPos.y - uWordBounds.z) / max(0.001, uWordBounds.w - uWordBounds.z), 0.0, 1.0);
 
-          // Warm ruby crystal tone under photo during crossfade
-          vec3 finalColor = mix(uRubyColor * 0.35 + texColor.rgb * 0.65, texColor.rgb, smoothstep(0.75, 0.95, vShardTravel));
-          finalColor += rimGlint;
+          // Deep imperial ruby crystal core
+          vec3 deepRuby = vec3(0.12, 0.01, 0.03);
+          vec3 brightRuby = uRubyColor;
+          vec3 baseCore = mix(deepRuby, brightRuby, normY * 0.85 + 0.15);
 
-          gl_FragColor = vec4(finalColor, texColor.a * photoFade);
+          // Precision-chiseled facet edge seams
+          float edgeDist = min(vBarycentric.x, min(vBarycentric.y, vBarycentric.z));
+          float seam = 1.0 - smoothstep(0.008, 0.045, edgeDist);
+          vec3 seamColor = vec3(1.0, 0.82, 0.88) * (seam * 0.95);
+
+          // NYC Anamorphic Specular Light Sweep as letters solidify
+          float sweepCenter = mix(-0.25, 1.25, smoothstep(0.80, 0.98, uProgress));
+          float sweepDist = abs(normX - sweepCenter);
+          float sweepBeam = exp(-sweepDist * sweepDist * 45.0);
+          vec3 sweepGlow = vec3(1.0, 0.95, 0.98) * (sweepBeam * 1.6);
+
+          // Landing spark flash on each facet
+          vec3 glintColor = vec3(1.0, 0.96, 0.98) * (vLandingGlint * 0.85);
+
+          // Grazing Fresnel rim highlight along outer edges
+          float rim = pow(1.0 - clamp(dot(vWorldNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0), 3.0);
+          vec3 rimColor = vec3(1.0, 0.4, 0.5) * (rim * 0.6);
+
+          // Subtle ambient diamond shimmer when assembled
+          float idleSparkle = sin(uTime * 2.0 + vShardSeed * 12.56) * 0.5 + 0.5;
+          float settledIdle = smoothstep(0.95, 1.0, uProgress) * idleSparkle * seam * 0.4;
+
+          vec3 finalColor = baseCore + seamColor + sweepGlow + glintColor + rimColor + vec3(settledIdle);
+
+          gl_FragColor = vec4(finalColor, textFade);
         }
       `,
       transparent: true,
@@ -1011,10 +1089,10 @@ export const GlobalCanvas: React.FC = () => {
     shardsMesh.renderOrder = 1;
     shardsGroup.add(shardsMesh);
 
-    const photoMesh = new THREE.Mesh(currentShatterGeo, photoMaterial);
-    photoMesh.layers.enable(1);
-    photoMesh.renderOrder = 2;
-    shardsGroup.add(photoMesh);
+    const textMesh = new THREE.Mesh(currentShatterGeo, identityTextMaterial);
+    textMesh.layers.enable(1);
+    textMesh.renderOrder = 2;
+    shardsGroup.add(textMesh);
 
     // ----------------------------------------------------
     // WORLDWIDE SCENE: Interactive 3D Dotted Globe
@@ -1105,15 +1183,22 @@ export const GlobalCanvas: React.FC = () => {
     // GSAP ScrollTrigger Section Transitions & Scrubbing
     // ----------------------------------------------------
     const ctx = gsap.context(() => {
-      // 1. Hero Scroll Track: Shatter rock into mosaic and zoom camera linearly
+      // 1. Hero Scroll Track: Shatter rock into crystal IDENTITY wordmark
       ScrollTrigger.create({
         trigger: "#hero",
         start: "top top",
-        end: "bottom top",
+        end: "bottom bottom",
         scrub: true,
         onUpdate: (self) => {
           heroScrollProgress = self.progress;
         },
+      });
+
+      // Hero visibility tracking through complete scroll-out
+      ScrollTrigger.create({
+        trigger: "#hero",
+        start: "top top",
+        end: "bottom top",
         onEnter: () => {
           activeScene = "hero";
           heroGroup.visible = true;
@@ -1124,6 +1209,11 @@ export const GlobalCanvas: React.FC = () => {
           heroGroup.visible = false;
         },
         onEnterBack: () => {
+          activeScene = "hero";
+          heroGroup.visible = true;
+          globeGroup.visible = false;
+        },
+        onLeaveBack: () => {
           activeScene = "hero";
           heroGroup.visible = true;
           globeGroup.visible = false;
@@ -1195,6 +1285,7 @@ export const GlobalCanvas: React.FC = () => {
       if (activeScene === "hero") {
         const p = heroScrollProgress;
         shatterUniforms.uProgress.value = p;
+        identityTextMaterial.uniforms.uTime.value = elapsedTime;
 
         // Rock / Shards Idle Rotation and Visibility Swap
         if (p <= SHATTER_SWAP_THRESHOLD) {
@@ -1295,7 +1386,10 @@ export const GlobalCanvas: React.FC = () => {
         currentShatterGeo.dispose();
         currentShatterGeo = newGeo;
         shardsMesh.geometry = newGeo;
-        photoMesh.geometry = newGeo;
+        textMesh.geometry = newGeo;
+        identityTextMaterial.uniforms.uWordBounds.value.copy(
+          newGeo.userData.wordBounds
+        );
       }, 150);
     };
     window.addEventListener("resize", handleResize);
@@ -1315,10 +1409,9 @@ export const GlobalCanvas: React.FC = () => {
       backdropGeo.dispose();
       backdropMat.dispose();
       rubyEnvMap.dispose();
-      atlasTexture.dispose();
       currentShatterGeo.dispose();
       shardGlassMaterial.dispose();
-      photoMaterial.dispose();
+      identityTextMaterial.dispose();
       globeGeo.dispose();
       globeMaterial.dispose();
       renderer.dispose();
