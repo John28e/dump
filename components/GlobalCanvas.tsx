@@ -61,18 +61,18 @@ const SHATTER_SWAP_THRESHOLD = 0.004; // Seamless transition threshold between r
 
 // 12 Mosaic Image URLs in sequential order
 const MOSAIC_IMAGE_URLS = [
-  "/images/mosaic/mosaic-01-trail-stride.webp",
-  "/images/mosaic/mosaic-02-cyclist-climb.webp",
-  "/images/mosaic/mosaic-03-sprinter-blocks.webp",
-  "/images/mosaic/mosaic-04-basketball.webp",
-  "/images/mosaic/mosaic-05-swimmer.webp",
-  "/images/mosaic/mosaic-06-soccer.webp",
-  "/images/mosaic/mosaic-07-boxer.webp",
-  "/images/mosaic/mosaic-08-skier.webp",
-  "/images/mosaic/mosaic-09-mountain-runner.webp",
-  "/images/mosaic/mosaic-10-cyclist-pack.webp",
-  "/images/mosaic/mosaic-11-surfer-wave.webp",
-  "/images/mosaic/mosaic-12-rock-climbing.webp",
+  "/images/mosaic/mosaic-01-brand-board.webp",
+  "/images/mosaic/mosaic-02-stationery.webp",
+  "/images/mosaic/mosaic-03-packaging.webp",
+  "/images/mosaic/mosaic-04-phone-mockup.webp",
+  "/images/mosaic/mosaic-05-payments-app.webp",
+  "/images/mosaic/mosaic-06-tea-storefront.webp",
+  "/images/mosaic/mosaic-07-devtool-docs.webp",
+  "/images/mosaic/mosaic-08-homecare-booking.webp",
+  "/images/mosaic/mosaic-09-ai-infrastructure.webp",
+  "/images/mosaic/mosaic-10-agritech-platform.webp",
+  "/images/mosaic/mosaic-11-course-learning.webp",
+  "/images/mosaic/mosaic-12-mobility-transit.webp",
 ];
 
 // Utility: check WebGL support safely
