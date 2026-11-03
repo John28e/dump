@@ -6,8 +6,8 @@ import { useAppStore } from "@/lib/store";
 import { CopyEmail } from "./CopyEmail";
 
 const CONTACT_EMAILS = [
-  { label: "Commercial", email: "commercial@dump.example" },
-  { label: "Film", email: "film@dump.example" },
+  { label: "Projects", email: "projects@dump.example" },
+  { label: "Partnerships", email: "partnerships@dump.example" },
   { label: "General", email: "general@dump.example" },
   { label: "Invoicing", email: "invoicing@dump.example" },
 ];
@@ -300,7 +300,7 @@ export const ContactModal: React.FC = () => {
 
           {/* Headline */}
           <h2 className="text-heading-xl text-black leading-[0.8em] mt-[3rem] md:mt-0 mb-8 md:mb-10 text-left">
-            Available <br /> worldwide
+            Open for new <br /> projects
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-6 gap-8 items-end">
@@ -329,14 +329,14 @@ export const ContactModal: React.FC = () => {
             <div className="md:col-span-2 flex flex-col justify-between gap-6 text-left">
               <div className="text-body-md text-black leading-relaxed">
                 <p className="font-bold tracking-tight uppercase">STUDIO DUMP</p>
-                <p>404 ATHLETIC WAY, FLOOR 4</p>
-                <p>NEW YORK, NY 10001</p>
-                <p className="font-bold text-xs text-gray-500 mt-1 uppercase">UNITED STATES</p>
+                <p>BY APPOINTMENT</p>
+                <p>KOCHI, KERALA</p>
+                <p className="font-bold text-xs text-gray-500 mt-1 uppercase">INDIA</p>
               </div>
 
-              {/* Social links (Instagram, LinkedIn, Vimeo) with href="#" */}
+              {/* Social links (Instagram, LinkedIn, Behance) with href="#" */}
               <div className="flex flex-col gap-1">
-                {["Instagram", "LinkedIn", "Vimeo"].map((social) => (
+                {["Instagram", "LinkedIn", "Behance"].map((social) => (
                   <a
                     key={social}
                     href="#"

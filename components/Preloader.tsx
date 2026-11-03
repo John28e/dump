@@ -10,10 +10,10 @@ import {
 } from "@/components/ui/progressive-flux-loader";
 
 const PRELOADER_PHASES: ProgressiveFluxPhase[] = [
-  { at: 0, label: "on your marks" },
-  { at: 35, label: "get set" },
-  { at: 70, label: "go" },
-  { at: 100, label: "ready" },
+  { at: 0, label: "discover" },
+  { at: 35, label: "design" },
+  { at: 70, label: "develop" },
+  { at: 100, label: "deploy" },
 ];
 
 export const Preloader: React.FC = () => {

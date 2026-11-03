@@ -157,7 +157,7 @@ export const WhatWeDo: React.FC = () => {
                 02 / CLIENTS
               </p>
               <h3 className="text-heading-lg font-bold uppercase tracking-tight text-black mb-6">
-                Partners
+                Clients
               </h3>
             </div>
 
@@ -199,15 +199,15 @@ export const WhatWeDo: React.FC = () => {
 
             <div className="mb-4">
               <p className="text-label text-black font-bold uppercase tracking-wider mb-2">
-                03 / ATHLETES
+                03 / SECTORS
               </p>
               <h3 className="text-heading-lg font-bold uppercase tracking-tight text-black mb-4">
-                Collaborators
+                Industries
               </h3>
             </div>
 
             <p className="text-body-md text-black leading-relaxed font-medium uppercase tracking-tight">
-              {PLACEHOLDER_DATA.whatWeDo.athletes}
+              {PLACEHOLDER_DATA.whatWeDo.sectors}
             </p>
           </div>
         </div>

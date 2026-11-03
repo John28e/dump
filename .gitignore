@@ -38,3 +38,10 @@ next-env.d.ts
 .cache/
 /scratch/
 /tmp/
+
+# analysis and baseline artifacts
+SITE_ANALYSIS.md
+docs/site-analysis/
+docs/baseline/
+docs/content-map.json
+

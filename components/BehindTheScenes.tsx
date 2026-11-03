@@ -36,14 +36,14 @@ export const BehindTheScenes: React.FC = () => {
       {/* Carousel Header with Title and Linear Progress Indicator Bar */}
       <div className="flex items-center gap-gap-lg px-grid-margin mb-gap-lg">
         <h3 className="text-heading-md font-bold uppercase tracking-tight text-black">
-          Behind the scenes
+          How we work
         </h3>
         <div
           role="progressbar"
           aria-valuenow={Math.round(scrollProgress * 100)}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label="Behind the scenes carousel scroll progress"
+          aria-label="How we work carousel scroll progress"
           className="relative w-32 h-[2px] bg-gray-200 overflow-hidden"
         >
           <div
@@ -286,7 +286,7 @@ const BtsCard: React.FC<BtsCardProps> = ({ item, emblaApi }) => {
             {/* Bottom Meta */}
             <div className="pt-2 border-t border-neutral-800">
               <span className="text-label text-gray-400 uppercase tracking-wider">
-                STUDIO ARCHIVE // DUMP
+                STUDIO NOTES // DUMP
               </span>
             </div>
           </div>
