@@ -225,7 +225,7 @@ export const ProjectListView: React.FC<ProjectListViewProps> = ({
                       />
                       <span
                         data-project-list-line="true"
-                        className="flex-1 h-[0.5px] bg-whatwedo-athlete mx-1"
+                        className="flex-1 h-[0.5px] bg-whatwedo-sector mx-1"
                       />
                       <span
                         data-project-list-pixel="right"

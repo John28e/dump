@@ -175,10 +175,10 @@ export const WhatWeDo: React.FC = () => {
         </div>
       </div>
 
-      {/* Row 2: Athletes Box (#cacaca, 1 box 100% w) */}
+      {/* Row 2: Sectors Box (#cacaca, 1 box 100% w) */}
       <div className="grid-layout">
         <div className="col-span-5 md:col-start-3 md:col-span-8">
-          <div className="whatwedo-box relative w-full bg-whatwedo-athlete p-whatwedo-box-p flex flex-col justify-between">
+          <div className="whatwedo-box relative w-full bg-whatwedo-sector p-whatwedo-box-p flex flex-col justify-between">
             {/* 4 Corner Dots (data-dot, 0.15s stagger) */}
             <span
               data-dot="true"

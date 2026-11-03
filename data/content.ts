@@ -152,7 +152,7 @@ export const PLACEHOLDER_PROJECTS: ProjectItem[] = [
     role: "Brand identity, UI/UX design, progressive web application",
     format: "Brand identity and web platform",
     location: "Remote, India",
-    brief: "Bridge regional farm cooperatives with enterprise produce buyers through a transparent digital marketplace.",
+    brief: "Connect regional farm cooperatives with enterprise produce buyers through a transparent digital marketplace.",
     approach: "Created high-legibility mobile interfaces optimized for rural connectivity and rapid trade matching.",
     result: "An accessible agricultural trading interface built for field and desktop operations.",
   },
@@ -383,9 +383,6 @@ export const PLACEHOLDER_DATA = {
     ],
     // Sectors description
     sectors:
-      "Fintech, SaaS, D2C, Healthtech, Edtech, Agritech, Mobility, AI Infrastructure, Climate Tech, Marketplaces, Developer Tools, Consumer Apps, and many more early-stage teams.",
-    // Alias for backward compatibility
-    athletes:
       "Fintech, SaaS, D2C, Healthtech, Edtech, Agritech, Mobility, AI Infrastructure, Climate Tech, Marketplaces, Developer Tools, Consumer Apps, and many more early-stage teams.",
   },
   worldwide: {

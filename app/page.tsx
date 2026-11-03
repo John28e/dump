@@ -72,7 +72,7 @@ export default function Home() {
         {/* Behind the Scenes Carousel (Embla dragFree loop, progress bar, 3D flip on desktop) */}
         <BehindTheScenes />
 
-        {/* What We Do (3 boxes: Services, Clients, Athletes, corner dots, scrubbed rotate -6 to 0) */}
+        {/* What We Do (3 boxes: Services, Clients, Sectors, corner dots, scrubbed rotate -6 to 0) */}
         <WhatWeDo />
       </section>
 

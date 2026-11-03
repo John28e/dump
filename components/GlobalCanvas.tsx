@@ -273,7 +273,7 @@ function loadAndBuildTextureAtlas(
 
 // Build non-indexed Shard BufferGeometry with target mosaic layout & attributes
 function buildShatterGeometry(
-  isPortrait: boolean,
+  isVertical: boolean,
   isMobile: boolean,
   baseRockPositions: Float32Array,
   cameraD: number = 3.2
@@ -362,17 +362,17 @@ function buildShatterGeometry(
   const aspect =
     typeof window !== "undefined"
       ? window.innerWidth / window.innerHeight
-      : isPortrait
+      : isVertical
       ? 0.56
       : 1.6;
   const fW = fH * aspect;
-  const mosaicW = isPortrait ? fW * 0.92 : Math.min(fW * 0.90, 4.8);
-  const mosaicH = isPortrait
+  const mosaicW = isVertical ? fW * 0.92 : Math.min(fW * 0.90, 4.8);
+  const mosaicH = isVertical
     ? Math.min(fH * 0.82, mosaicW * 1.5)
     : Math.min(fH * 0.88, 2.4);
 
   // Generate Jittered Organic Triangulation Grid covering mosaic bounds
-  const cols = isPortrait ? 9 : 11;
+  const cols = isVertical ? 9 : 11;
   const rows = 10;
   const rand = createPseudoRandom(SHATTER_RANDOM_SEED);
 
@@ -410,8 +410,8 @@ function buildShatterGeometry(
   }
 
   // 12 Photo Seeds for Voronoi Clustering (4x3 in landscape, 3x4 in portrait)
-  const seedCols = isPortrait ? 3 : 4;
-  const seedRows = isPortrait ? 4 : 3;
+  const seedCols = isVertical ? 3 : 4;
+  const seedRows = isVertical ? 4 : 3;
   const photoSeeds: { x: number; y: number; id: number }[] = [];
   for (let r = 0; r < seedRows; r++) {
     for (let c = 0; c < seedCols; c++) {
@@ -615,7 +615,7 @@ export const GlobalCanvas: React.FC = () => {
       typeof window !== "undefined" &&
       (window.innerWidth < 768 ||
         window.matchMedia("(pointer: coarse)").matches);
-    const isPortraitViewport =
+    const isVerticalViewport =
       typeof window !== "undefined" &&
       window.innerHeight > window.innerWidth;
 
@@ -785,7 +785,7 @@ export const GlobalCanvas: React.FC = () => {
 
     // Build initial shatter geometry
     let currentShatterGeo = buildShatterGeometry(
-      isPortraitViewport,
+      isVerticalViewport,
       isMobileViewport,
       baseRockPositions,
       3.2
