@@ -4,7 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PLACEHOLDER_PROJECTS, PLACEHOLDER_DATA } from "@/data/content";
 
-const SITE_URL = "https://dump-pied.vercel.app";
+const SITE_URL = "https://identity-pied.vercel.app";
 
 interface ProjectPageProps {
   params: Promise<{ slug: string }>;

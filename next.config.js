@@ -5,6 +5,17 @@ const nextConfig = {
     const decode = (b64) => Buffer.from(b64, 'base64').toString('ascii');
     return [
       {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'dump-pied.vercel.app',
+          },
+        ],
+        destination: 'https://identity-pied.vercel.app/:path*',
+        permanent: true,
+      },
+      {
         source: decode('L3Byb2plY3RzL3JpZGdlLXN0cmlkZQ=='),
         destination: '/projects/clear-ledger',
         permanent: true,

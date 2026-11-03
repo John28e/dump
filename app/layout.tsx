@@ -22,7 +22,7 @@ export const viewport: Viewport = {
   themeColor: "#000000",
 };
 
-const SITE_URL = "https://dump-pied.vercel.app";
+const SITE_URL = "https://identity-pied.vercel.app";
 
 export const metadata: Metadata = {
   title: "identity — Brand & Website Studio for Startups",
