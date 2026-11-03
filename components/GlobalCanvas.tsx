@@ -183,123 +183,119 @@ function buildRockGeometry(): THREE.BufferGeometry {
   return rockGeo;
 }
 
-// Helper: Generate precision typographic letterforms for "IDENTITY" and triangulate
+// Helper: Generate precision minimal typographic letterforms for "IDENTITY" and triangulate
 function generateIdentityTriangles(
   targetCount: number,
   _isVertical: boolean
 ): { triangles: [THREE.Vector2, THREE.Vector2, THREE.Vector2][]; width: number; height: number } {
-  function makeI(x: number, y: number, w: number, h: number, s: THREE.Shape) {
+  const h = 0.82;
+  const t = 0.082; // slender, elegant modern minimal stroke weight
+
+  function makeI(x: number, y: number, _w: number, h: number, s: THREE.Shape) {
     s.moveTo(x, y);
-    s.lineTo(x + w, y);
-    s.lineTo(x + w, y + h);
+    s.lineTo(x + t, y);
+    s.lineTo(x + t, y + h);
     s.lineTo(x, y + h);
     s.closePath();
   }
 
   function makeD(x: number, y: number, w: number, h: number, s: THREE.Shape) {
-    const stem = w * 0.36;
     s.moveTo(x, y);
-    s.lineTo(x + w * 0.48, y);
+    s.lineTo(x + w * 0.44, y);
     s.bezierCurveTo(
-      x + w * 1.02,
-      y + h * 0.08,
-      x + w * 1.02,
-      y + h * 0.92,
-      x + w * 0.48,
+      x + w * 1.04,
+      y + h * 0.06,
+      x + w * 1.04,
+      y + h * 0.94,
+      x + w * 0.44,
       y + h
     );
     s.lineTo(x, y + h);
     s.closePath();
 
     const hole = new THREE.Path();
-    hole.moveTo(x + stem, y + h * 0.20);
-    hole.lineTo(x + w * 0.45, y + h * 0.20);
+    hole.moveTo(x + t, y + h - t);
+    hole.lineTo(x + w * 0.4, y + h - t);
     hole.bezierCurveTo(
-      x + w * 0.68,
-      y + h * 0.26,
-      x + w * 0.68,
-      y + h * 0.74,
-      x + w * 0.45,
-      y + h * 0.80
+      x + w * 0.8,
+      y + h * 0.84,
+      x + w * 0.8,
+      y + h * 0.16,
+      x + w * 0.4,
+      y + t
     );
-    hole.lineTo(x + stem, y + h * 0.80);
+    hole.lineTo(x + t, y + t);
     hole.closePath();
     s.holes.push(hole);
   }
 
   function makeE(x: number, y: number, w: number, h: number, s: THREE.Shape) {
-    const barH = h * 0.18;
-    const stemW = w * 0.38;
+    const midY = (h - t) * 0.5;
     s.moveTo(x, y);
     s.lineTo(x + w, y);
-    s.lineTo(x + w, y + barH);
-    s.lineTo(x + stemW, y + barH);
-    s.lineTo(x + stemW, y + h * 0.41);
-    s.lineTo(x + w * 0.86, y + h * 0.41);
-    s.lineTo(x + w * 0.86, y + h * 0.59);
-    s.lineTo(x + stemW, y + h * 0.59);
-    s.lineTo(x + stemW, y + h - barH);
-    s.lineTo(x + w, y + h - barH);
+    s.lineTo(x + w, y + t);
+    s.lineTo(x + t, y + t);
+    s.lineTo(x + t, y + midY);
+    s.lineTo(x + w * 0.82, y + midY);
+    s.lineTo(x + w * 0.82, y + midY + t);
+    s.lineTo(x + t, y + midY + t);
+    s.lineTo(x + t, y + h - t);
+    s.lineTo(x + w, y + h - t);
     s.lineTo(x + w, y + h);
     s.lineTo(x, y + h);
     s.closePath();
   }
 
   function makeN(x: number, y: number, w: number, h: number, s: THREE.Shape) {
-    const stemW = w * 0.34;
     s.moveTo(x, y);
-    s.lineTo(x + stemW, y);
-    s.lineTo(x + w - stemW, y + h * 0.38);
-    s.lineTo(x + w - stemW, y);
-    s.lineTo(x + w, y);
-    s.lineTo(x + w, y + h);
-    s.lineTo(x + w - stemW, y + h);
-    s.lineTo(x + stemW, y + h * 0.62);
-    s.lineTo(x + stemW, y + h);
     s.lineTo(x, y + h);
+    s.lineTo(x + t, y + h);
+    s.lineTo(x + w - t, y + t * 1.4);
+    s.lineTo(x + w - t, y + h);
+    s.lineTo(x + w, y + h);
+    s.lineTo(x + w, y);
+    s.lineTo(x + w - t, y);
+    s.lineTo(x + t, y + h - t * 1.4);
+    s.lineTo(x + t, y);
     s.closePath();
   }
 
   function makeT(x: number, y: number, w: number, h: number, s: THREE.Shape) {
-    const barH = h * 0.18;
-    const stemW = w * 0.38;
-    const stemX = x + (w - stemW) / 2;
-    s.moveTo(x, y + h - barH);
-    s.lineTo(stemX, y + h - barH);
-    s.lineTo(stemX, y);
-    s.lineTo(stemX + stemW, y);
-    s.lineTo(stemX + stemW, y + h - barH);
-    s.lineTo(x + w, y + h - barH);
+    const stemX = x + (w - t) / 2;
+    s.moveTo(stemX, y);
+    s.lineTo(stemX + t, y);
+    s.lineTo(stemX + t, y + h - t);
+    s.lineTo(x + w, y + h - t);
     s.lineTo(x + w, y + h);
     s.lineTo(x, y + h);
+    s.lineTo(x, y + h - t);
+    s.lineTo(stemX, y + h - t);
     s.closePath();
   }
 
   function makeY(x: number, y: number, w: number, h: number, s: THREE.Shape) {
-    const stemW = w * 0.36;
-    const stemX = x + (w - stemW) / 2;
-    const armW = w * 0.32;
+    const stemX = x + (w - t) / 2;
+    const junctionY = y + h * 0.44;
     s.moveTo(stemX, y);
-    s.lineTo(stemX + stemW, y);
-    s.lineTo(stemX + stemW, y + h * 0.44);
+    s.lineTo(stemX + t, y);
+    s.lineTo(stemX + t, junctionY);
     s.lineTo(x + w, y + h);
-    s.lineTo(x + w - armW, y + h);
-    s.lineTo(x + w * 0.5, y + h * 0.60);
-    s.lineTo(x + armW, y + h);
+    s.lineTo(x + w - t * 1.3, y + h);
+    s.lineTo(x + w * 0.5, junctionY + t * 0.7);
+    s.lineTo(x + t * 1.3, y + h);
     s.lineTo(x, y + h);
-    s.lineTo(stemX, y + h * 0.44);
+    s.lineTo(stemX, junctionY);
     s.closePath();
   }
 
-  const h = 1.0;
-  const gap = 0.09;
+  const gap = 0.16; // airy, minimal tracking
   const letters = [
-    { fn: makeI, w: 0.22 },
-    { fn: makeD, w: 0.54 },
-    { fn: makeE, w: 0.46 },
-    { fn: makeN, w: 0.54 },
+    { fn: makeI, w: t },
+    { fn: makeD, w: 0.56 },
+    { fn: makeE, w: 0.45 },
+    { fn: makeN, w: 0.52 },
     { fn: makeT, w: 0.48 },
-    { fn: makeI, w: 0.22 },
+    { fn: makeI, w: t },
     { fn: makeT, w: 0.48 },
     { fn: makeY, w: 0.50 },
   ];
@@ -323,7 +319,7 @@ function generateIdentityTriangles(
     l.fn(curX, startY, l.w, h, s);
     curX += l.w + gap;
 
-    const rawGeo = new THREE.ShapeGeometry(s, 6);
+    const rawGeo = new THREE.ShapeGeometry(s, 12);
     const geo = rawGeo.toNonIndexed();
     rawGeo.dispose();
     const pos = geo.getAttribute("position");
@@ -1043,34 +1039,43 @@ export const GlobalCanvas: React.FC = () => {
           float normX = clamp((vWorldPos.x - uWordBounds.x) / max(0.001, uWordBounds.y - uWordBounds.x), 0.0, 1.0);
           float normY = clamp((vWorldPos.y - uWordBounds.z) / max(0.001, uWordBounds.w - uWordBounds.z), 0.0, 1.0);
 
-          // Deep imperial ruby crystal core
-          vec3 deepRuby = vec3(0.12, 0.01, 0.03);
-          vec3 brightRuby = uRubyColor;
-          vec3 baseCore = mix(deepRuby, brightRuby, normY * 0.85 + 0.15);
+          // Luminous imperial ruby crystal core - sleek, minimal & radiant
+          vec3 deepRuby = vec3(0.38, 0.035, 0.07);
+          vec3 brightRuby = vec3(0.96, 0.14, 0.28);
+          vec3 baseCore = mix(deepRuby, brightRuby, normY * 0.70 + 0.30);
 
-          // Precision-chiseled facet edge seams
+          // Studio light vertical sheen on upper glass surface
+          float topSheen = pow(normY, 1.5) * 0.32;
+          vec3 sheenColor = vec3(1.0, 0.88, 0.92) * topSheen;
+
+          // Subtle crystal facet seams that smoothly dissolve as shards lock into the minimal wordmark
           float edgeDist = min(vBarycentric.x, min(vBarycentric.y, vBarycentric.z));
-          float seam = 1.0 - smoothstep(0.008, 0.045, edgeDist);
-          vec3 seamColor = vec3(1.0, 0.82, 0.88) * (seam * 0.95);
+          float seam = 1.0 - smoothstep(0.001, 0.012, edgeDist);
+          float seamDissolve = 1.0 - smoothstep(0.85, 0.98, uProgress);
+          vec3 seamColor = vec3(1.0, 0.88, 0.92) * (seam * seamDissolve * 0.40);
+
+          // Soft facet internal refraction variation for crystal depth
+          float facetDepth = (sin(vShardSeed * 53.19) * 0.5 + 0.5) * 0.12;
+          vec3 depthGlow = vec3(1.0, 0.3, 0.4) * facetDepth;
 
           // NYC Anamorphic Specular Light Sweep as letters solidify
           float sweepCenter = mix(-0.25, 1.25, smoothstep(0.80, 0.98, uProgress));
           float sweepDist = abs(normX - sweepCenter);
-          float sweepBeam = exp(-sweepDist * sweepDist * 45.0);
-          vec3 sweepGlow = vec3(1.0, 0.95, 0.98) * (sweepBeam * 1.6);
+          float sweepBeam = exp(-sweepDist * sweepDist * 28.0);
+          vec3 sweepGlow = vec3(1.0, 0.95, 0.98) * (sweepBeam * 0.90);
 
           // Landing spark flash on each facet
-          vec3 glintColor = vec3(1.0, 0.96, 0.98) * (vLandingGlint * 0.85);
+          vec3 glintColor = vec3(1.0, 0.96, 0.98) * (vLandingGlint * 0.55);
 
-          // Grazing Fresnel rim highlight along outer edges
-          float rim = pow(1.0 - clamp(dot(vWorldNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0), 3.0);
-          vec3 rimColor = vec3(1.0, 0.4, 0.5) * (rim * 0.6);
+          // Delicate grazing Fresnel rim highlight along outer edges
+          float rim = pow(1.0 - clamp(dot(vWorldNormal, vec3(0.0, 0.0, 1.0)), 0.0, 1.0), 2.5);
+          vec3 rimColor = vec3(1.0, 0.65, 0.75) * (rim * 0.55);
 
-          // Subtle ambient diamond shimmer when assembled
-          float idleSparkle = sin(uTime * 2.0 + vShardSeed * 12.56) * 0.5 + 0.5;
-          float settledIdle = smoothstep(0.95, 1.0, uProgress) * idleSparkle * seam * 0.4;
+          // Subtle ambient breathing shimmer when assembled
+          float idleSparkle = sin(uTime * 1.5 + vShardSeed * 6.28) * 0.5 + 0.5;
+          float settledIdle = smoothstep(0.96, 1.0, uProgress) * idleSparkle * 0.05;
 
-          vec3 finalColor = baseCore + seamColor + sweepGlow + glintColor + rimColor + vec3(settledIdle);
+          vec3 finalColor = baseCore + sheenColor + seamColor + depthGlow + sweepGlow + glintColor + rimColor + vec3(settledIdle);
 
           gl_FragColor = vec4(finalColor, textFade);
         }
