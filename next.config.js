@@ -12,7 +12,29 @@ const nextConfig = {
             value: 'dump-pied.vercel.app',
           },
         ],
-        destination: 'https://identity-pied.vercel.app/:path*',
+        destination: 'https://studio-identity.vercel.app/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'identity-pied.vercel.app',
+          },
+        ],
+        destination: 'https://studio-identity.vercel.app/:path*',
+        permanent: true,
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'dump-studio.vercel.app',
+          },
+        ],
+        destination: 'https://studio-identity.vercel.app/:path*',
         permanent: true,
       },
       {

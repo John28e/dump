@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 import { PLACEHOLDER_PROJECTS } from "@/data/content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://identity-pied.vercel.app";
+  const baseUrl = "https://studio-identity.vercel.app";
 
   const projectRoutes: MetadataRoute.Sitemap = PLACEHOLDER_PROJECTS.map((project) => ({
     url: `${baseUrl}/projects/${project.slug}`,

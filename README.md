@@ -4,7 +4,7 @@
 
 ## 🔗 Live Demo
 
-Live Deployment: [https://identity-pied.vercel.app](https://identity-pied.vercel.app)
+Live Deployment: [https://studio-identity.vercel.app](https://studio-identity.vercel.app)
 
 ## 🏗 What I Built
 
