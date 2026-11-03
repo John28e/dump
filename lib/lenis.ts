@@ -12,9 +12,14 @@ export function initLenis(): Lenis | null {
   gsap.registerPlugin(ScrollTrigger);
 
   lenisInstance = new Lenis({
-    lerp: 0.08,
-    wheelMultiplier: 0.9,
-    touchMultiplier: 1.15,
+    duration: 1.25,
+    easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    orientation: "vertical",
+    gestureOrientation: "vertical",
+    smoothWheel: true,
+    wheelMultiplier: 1.0,
+    touchMultiplier: 1.5,
+    infinite: false,
     autoRaf: false, // We drive Lenis from GSAP's single ticker!
   });
 

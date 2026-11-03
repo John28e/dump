@@ -114,34 +114,32 @@ interface ProjectCardProps {
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const mediaRef = useRef<HTMLDivElement | null>(null);
-  const [haloPos, setHaloPos] = useState<{ x: number; y: number; active: boolean }>({
-    x: 0,
-    y: 0,
-    active: false,
-  });
+  const haloRef = useRef<HTMLDivElement | null>(null);
 
   const handlePointerEnter = useCallback(() => {
-    setHaloPos((prev) => ({ ...prev, active: true }));
+    if (haloRef.current) {
+      haloRef.current.style.opacity = "1";
+    }
     if (videoRef.current) {
       videoRef.current.play().catch(() => {});
     }
   }, []);
 
   const handlePointerLeave = useCallback(() => {
-    setHaloPos((prev) => ({ ...prev, active: false }));
+    if (haloRef.current) {
+      haloRef.current.style.opacity = "0";
+    }
     if (videoRef.current) {
       videoRef.current.pause();
     }
   }, []);
 
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (!mediaRef.current) return;
+    if (!mediaRef.current || !haloRef.current) return;
     const rect = mediaRef.current.getBoundingClientRect();
-    setHaloPos({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-      active: true,
-    });
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    haloRef.current.style.background = `radial-gradient(circle 210px at ${x}px ${y}px, rgba(255, 255, 255, 0.2), transparent 70%)`;
   }, []);
 
   return (
@@ -195,14 +193,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         )}
 
         {/* Spotlight halo cursor tracker (radius ratio 0.7 per spec) */}
-        {haloPos.active && (
-          <div
-            className="pointer-events-none absolute inset-0 transition-opacity duration-300"
-            style={{
-              background: `radial-gradient(circle 210px at ${haloPos.x}px ${haloPos.y}px, rgba(255, 255, 255, 0.2), transparent 70%)`,
-            }}
-          />
-        )}
+        <div
+          ref={haloRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300"
+        />
       </div>
 
       {/* Project Card Metadata Layout */}

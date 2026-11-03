@@ -759,6 +759,7 @@ export const GlobalCanvas: React.FC = () => {
     // 3. State & Active Scene Tracking
     let activeScene: "hero" | "globe" | "none" = "hero";
     let heroScrollProgress = 0;
+    let smoothedHeroProgress = 0;
 
     // ----------------------------------------------------
     // HERO SCENE: Procedural Rock-Podium + Shatter Mosaic
@@ -1385,7 +1386,13 @@ export const GlobalCanvas: React.FC = () => {
 
       // Render Hero Scene
       if (activeScene === "hero") {
-        const p = heroScrollProgress;
+        // Frame-rate independent exponential smoothing for butter-smooth WebGL motion
+        const blend = 1.0 - Math.exp(-14.0 * dt);
+        smoothedHeroProgress += (heroScrollProgress - smoothedHeroProgress) * blend;
+        if (Math.abs(heroScrollProgress - smoothedHeroProgress) < 0.0001) {
+          smoothedHeroProgress = heroScrollProgress;
+        }
+        const p = smoothedHeroProgress;
         shatterUniforms.uProgress.value = p;
         photoMaterial.uniforms.uTime.value = elapsedTime;
 
@@ -1455,8 +1462,8 @@ export const GlobalCanvas: React.FC = () => {
         globeVelocity.x *= 0.93;
         globeVelocity.y *= 0.93;
 
-        if (!isGlobeDragging && Math.abs(globeVelocity.x) < 0.0003) {
-          globePoints.rotation.y += 0.0022;
+        if (!isGlobeDragging) {
+          globeVelocity.x += (0.0018 - globeVelocity.x) * 0.025;
         }
 
         renderer.render(scene, camera);
