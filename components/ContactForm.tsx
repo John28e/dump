@@ -258,9 +258,29 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onBack, openedAt }) =>
           >
             Message sent.
           </h3>
-          <p className="text-body-md text-black mb-8 leading-relaxed">
+          <p className="text-body-md text-black mb-6 leading-relaxed">
             Thanks. We&apos;ll be in touch soon.
           </p>
+
+          {/* Automated Response Receipt */}
+          <div className="border border-black p-4 mb-8 bg-gray-50/50 space-y-2.5 text-xs uppercase font-mono tracking-wider">
+            <div className="flex justify-between border-b border-gray-200 pb-2">
+              <span className="text-gray-500 font-bold">Status</span>
+              <span className="font-bold text-black">✓ Logged &amp; Dispatched</span>
+            </div>
+            <div className="flex justify-between border-b border-gray-200 pb-2">
+              <span className="text-gray-500 font-bold">Inquiry Type</span>
+              <span className="font-bold text-black">{values.project_type || "General"}</span>
+            </div>
+            <div className="flex justify-between border-b border-gray-200 pb-2">
+              <span className="text-gray-500 font-bold">Confirmation Sent To</span>
+              <span className="font-bold text-black lowercase">{values.email}</span>
+            </div>
+            <div className="flex justify-between pt-0.5">
+              <span className="text-gray-500 font-bold">Expected Response</span>
+              <span className="font-bold text-black">&lt; 24 Hours</span>
+            </div>
+          </div>
 
           <button
             type="button"
