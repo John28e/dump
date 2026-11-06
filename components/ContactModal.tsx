@@ -1,9 +1,16 @@
 "use client";
 
-import React, { useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import dynamic from "next/dynamic";
 import gsap from "gsap";
 import { useAppStore } from "@/lib/store";
+import { useLenisScroll } from "@/hooks/useLenisScroll";
 import { CopyEmail } from "./CopyEmail";
+
+const ContactForm = dynamic(
+  () => import("./ContactForm").then((mod) => mod.ContactForm),
+  { ssr: false }
+);
 
 const CONTACT_EMAILS = [
   { label: "Projects", email: "projects@identity.example" },
@@ -14,11 +21,32 @@ const CONTACT_EMAILS = [
 
 export const ContactModal: React.FC = () => {
   const { isContactOpen, closeContact } = useAppStore();
+  const { stop: stopLenis, start: startLenis } = useLenisScroll();
+
+  const [activePanel, setActivePanel] = useState<1 | 2>(1);
+  const [panelOpenedAt, setPanelOpenedAt] = useState<number>(0);
+
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const cardRef = useRef<HTMLDivElement | null>(null);
+  const panel1Ref = useRef<HTMLDivElement | null>(null);
+  const panel2Ref = useRef<HTMLDivElement | null>(null);
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
+  const sendMsgBtnRef = useRef<HTMLButtonElement | null>(null);
   const blurVal = useRef({ value: 0 });
   const triggerElementRef = useRef<HTMLElement | null>(null);
+
+  // Stop Lenis while modal is open, resume when closed
+  useEffect(() => {
+    if (isContactOpen) {
+      stopLenis();
+      setActivePanel(1);
+    } else {
+      startLenis();
+    }
+    return () => {
+      startLenis();
+    };
+  }, [isContactOpen, stopLenis, startLenis]);
 
   // Focus restoration & initial focus
   const handleClose = useCallback(() => {
@@ -28,7 +56,7 @@ export const ContactModal: React.FC = () => {
     }
   }, [closeContact]);
 
-  // Track trigger element when opening & manage focus trapping
+  // Track trigger element when opening & manage initial focus
   useEffect(() => {
     if (isContactOpen) {
       triggerElementRef.current = document.activeElement as HTMLElement | null;
@@ -37,6 +65,81 @@ export const ContactModal: React.FC = () => {
       }, 50);
     }
   }, [isContactOpen]);
+
+  // Panel navigation with smooth GSAP transitions
+  const handleOpenForm = useCallback(() => {
+    const isReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    setPanelOpenedAt(Date.now());
+
+    if (isReducedMotion || !panel1Ref.current) {
+      setActivePanel(2);
+      return;
+    }
+
+    gsap.to(panel1Ref.current, {
+      x: -30,
+      opacity: 0,
+      duration: 0.35,
+      ease: "power2.inOut",
+      onComplete: () => {
+        setActivePanel(2);
+      },
+    });
+  }, []);
+
+  const handleBackToDetails = useCallback(() => {
+    const isReducedMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (isReducedMotion || !panel2Ref.current) {
+      setActivePanel(1);
+      setTimeout(() => {
+        sendMsgBtnRef.current?.focus();
+      }, 50);
+      return;
+    }
+
+    gsap.to(panel2Ref.current, {
+      x: 30,
+      opacity: 0,
+      duration: 0.3,
+      ease: "power2.inOut",
+      onComplete: () => {
+        setActivePanel(1);
+        setTimeout(() => {
+          sendMsgBtnRef.current?.focus();
+          if (panel1Ref.current) {
+            gsap.fromTo(
+              panel1Ref.current,
+              { x: -30, opacity: 0 },
+              { x: 0, opacity: 1, duration: 0.3, ease: "power2.out" }
+            );
+          }
+        }, 30);
+      },
+    });
+  }, []);
+
+  // Entrance animation for Panel 2
+  useEffect(() => {
+    if (activePanel === 2 && panel2Ref.current) {
+      const isReducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (!isReducedMotion) {
+        gsap.fromTo(
+          panel2Ref.current,
+          { x: 30, opacity: 0 },
+          { x: 0, opacity: 1, duration: 0.35, ease: "power2.inOut" }
+        );
+      }
+    }
+  }, [activePanel]);
 
   // Escape key and Focus Trapping
   useEffect(() => {
@@ -50,9 +153,12 @@ export const ContactModal: React.FC = () => {
       }
 
       if (e.key === "Tab" && cardRef.current) {
-        const focusables = cardRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
+        const focusables = Array.from(
+          cardRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => el.offsetParent !== null && !el.hasAttribute("inert"));
+
         if (focusables.length === 0) return;
         const first = focusables[0];
         const last = focusables[focusables.length - 1];
@@ -262,6 +368,7 @@ export const ContactModal: React.FC = () => {
       >
         <div
           ref={cardRef}
+          data-lenis-prevent="true"
           className="relative w-full max-w-full h-full md:h-auto bg-white text-black p-6 md:p-10 shadow-2xl overflow-y-auto max-h-[88vh] hide-scrollbar [backface-visibility:hidden]"
         >
           {/* Close button with pixel dashed border and hover animation (#32) */}
@@ -272,7 +379,7 @@ export const ContactModal: React.FC = () => {
             onMouseEnter={handleCloseEnter}
             onMouseLeave={handleCloseLeave}
             aria-label="Close contact dialog"
-            className="absolute top-[1.2rem] right-[1.2rem] md:top-[2.4rem] md:right-[2.4rem] cursor-pointer rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+            className="absolute top-[1.2rem] right-[1.2rem] md:top-[2.4rem] md:right-[2.4rem] cursor-pointer rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 z-10"
           >
             <svg
               width="54"
@@ -298,73 +405,103 @@ export const ContactModal: React.FC = () => {
             </svg>
           </button>
 
-          {/* Headline */}
-          <h2 className="text-heading-xl text-black leading-[0.8em] mt-[3rem] md:mt-0 mb-8 md:mb-10 text-left">
-            Open for new <br /> projects
-          </h2>
+          {/* Panel 1: Contact Details */}
+          <div
+            ref={panel1Ref}
+            style={{ display: activePanel === 1 ? "block" : "none" }}
+            aria-hidden={activePanel !== 1}
+          >
+            {/* Headline */}
+            <h2 className="text-heading-xl text-black leading-[0.8em] mt-[3rem] md:mt-0 mb-8 md:mb-10 text-left">
+              Open for new <br /> projects
+            </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-6 gap-8 items-end">
-            {/* Simple original architectural graphic (not copying original sign.svg) */}
-            <div className="md:col-span-2 flex flex-col justify-end">
-              <svg
-                width="80"
-                height="122"
-                viewBox="0 0 80 122"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-16 h-auto text-black"
-                aria-hidden="true"
-              >
-                {/* Original geometric architectural totem */}
-                <rect x="37" y="0" width="6" height="122" fill="currentColor" />
-                <rect x="6" y="16" width="68" height="24" fill="currentColor" />
-                <line x1="6" y1="28" x2="74" y2="28" stroke="white" strokeWidth="2" />
-                <polygon points="40,56 72,76 8,76" fill="currentColor" />
-                <circle cx="40" cy="102" r="10" fill="currentColor" />
-                <circle cx="40" cy="102" r="5" fill="white" />
-              </svg>
-            </div>
-
-            {/* Studio Address & Socials */}
-            <div className="md:col-span-2 flex flex-col justify-between gap-6 text-left">
-              <div className="text-body-md text-black leading-relaxed">
-                <p className="font-bold tracking-tight uppercase">STUDIO IDENTITY</p>
-                <p>BY APPOINTMENT</p>
-                <p>KOCHI, KERALA</p>
-                <p className="font-bold text-xs text-gray-500 mt-1 uppercase">INDIA</p>
+            <div className="grid grid-cols-1 md:grid-cols-6 gap-8 items-end">
+              {/* Original geometric architectural totem */}
+              <div className="md:col-span-2 flex flex-col justify-end">
+                <svg
+                  width="80"
+                  height="122"
+                  viewBox="0 0 80 122"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="w-16 h-auto text-black"
+                  aria-hidden="true"
+                >
+                  <rect x="37" y="0" width="6" height="122" fill="currentColor" />
+                  <rect x="6" y="16" width="68" height="24" fill="currentColor" />
+                  <line x1="6" y1="28" x2="74" y2="28" stroke="white" strokeWidth="2" />
+                  <polygon points="40,56 72,76 8,76" fill="currentColor" />
+                  <circle cx="40" cy="102" r="10" fill="currentColor" />
+                  <circle cx="40" cy="102" r="5" fill="white" />
+                </svg>
               </div>
 
-              {/* Social links (Instagram, LinkedIn, Behance) with href="#" */}
-              <div className="flex flex-col gap-1">
-                {["Instagram", "LinkedIn", "Behance"].map((social) => (
-                  <a
-                    key={social}
-                    href="#"
-                    onClick={(e) => e.preventDefault()}
-                    className="text-heading-md text-black hover:opacity-70 transition-opacity font-bold uppercase rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+              {/* Studio Address & Socials */}
+              <div className="md:col-span-2 flex flex-col justify-between gap-6 text-left">
+                <div className="text-body-md text-black leading-relaxed">
+                  <p className="font-bold tracking-tight uppercase">STUDIO IDENTITY</p>
+                  <p>BY APPOINTMENT</p>
+                  <p>KOCHI, KERALA</p>
+                  <p className="font-bold text-xs text-gray-500 mt-1 uppercase">INDIA</p>
+                </div>
+
+                {/* Social links + Send a message */}
+                <div className="flex flex-col gap-1">
+                  {["Instagram", "LinkedIn", "Behance"].map((social) => (
+                    <a
+                      key={social}
+                      href="#"
+                      onClick={(e) => e.preventDefault()}
+                      className="text-heading-md text-black hover:opacity-70 transition-opacity font-bold uppercase rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+                    >
+                      {social}
+                    </a>
+                  ))}
+                  <button
+                    ref={sendMsgBtnRef}
+                    type="button"
+                    onClick={handleOpenForm}
+                    className="text-heading-md text-black hover:opacity-70 transition-opacity font-bold uppercase rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 cursor-pointer mt-1"
                   >
-                    {social}
-                  </a>
+                    Send a message →
+                  </button>
+                </div>
+              </div>
+
+              {/* 4 Email Rows with CopyEmail (#33) */}
+              <div className="md:col-span-2 flex flex-col gap-5 text-left">
+                {CONTACT_EMAILS.map((item) => (
+                  <div key={item.label} className="flex flex-col">
+                    <p className="text-heading-md text-black font-bold uppercase mb-0.5">
+                      {item.label}
+                    </p>
+                    <CopyEmail
+                      email={item.email}
+                      className="text-body-md text-black underline underline-offset-4 hover:opacity-75 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
+                    >
+                      {item.email}
+                    </CopyEmail>
+                  </div>
                 ))}
               </div>
             </div>
+          </div>
 
-            {/* 4 Email Rows with CopyEmail (#33) */}
-            <div className="md:col-span-2 flex flex-col gap-5 text-left">
-              {CONTACT_EMAILS.map((item) => (
-                <div key={item.label} className="flex flex-col">
-                  <p className="text-heading-md text-black font-bold uppercase mb-0.5">
-                    {item.label}
-                  </p>
-                  <CopyEmail
-                    email={item.email}
-                    className="text-body-md text-black underline underline-offset-4 hover:opacity-75 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
-                  >
-                    {item.email}
-                  </CopyEmail>
-                </div>
-              ))}
-            </div>
+          {/* Panel 2: Contact Form */}
+          <div
+            ref={panel2Ref}
+            data-lenis-prevent="true"
+            style={{ display: activePanel === 2 ? "block" : "none" }}
+            aria-hidden={activePanel !== 2}
+            className="pt-2"
+          >
+            {activePanel === 2 && (
+              <ContactForm
+                onBack={handleBackToDetails}
+                openedAt={panelOpenedAt}
+              />
+            )}
           </div>
         </div>
       </div>
