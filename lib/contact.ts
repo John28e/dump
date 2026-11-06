@@ -275,15 +275,21 @@ export async function submitContact(values: ContactFormValues): Promise<ContactS
   const cleanProjectType = sanitizeSingleLine(values.project_type);
   const cleanMessage = values.message.trim();
 
+  const subjectLine = cleanCompany
+    ? `[Studio Identity] ${cleanProjectType} Inquiry: ${cleanName} (${cleanCompany})`
+    : `[Studio Identity] ${cleanProjectType} Inquiry: ${cleanName}`;
+
   const payload: Record<string, string> = {
     access_key: accessKey,
-    subject: `New message from ${cleanName} via identity`,
-    from_name: "identity site",
+    subject: subjectLine,
+    from_name: "Studio Identity",
+    replyto: cleanEmail,
     name: cleanName,
     email: cleanEmail,
-    company: cleanCompany,
+    company: cleanCompany || "Not specified",
     project_type: cleanProjectType,
     message: cleanMessage,
+    site_origin: typeof window !== "undefined" ? window.location.origin : "https://studio-identity.vercel.app",
     botcheck: "",
   };
 

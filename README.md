@@ -85,6 +85,7 @@ The site includes an interactive contact form embedded inside the Contact pop-up
   - **Submission Cooldown**: A client-side 60-second cooldown between consecutive submissions.
   - **Session Limits**: A hard limit of at most 3 submissions per browser session.
   - **Input Sanitization**: Single-line sanitization on header fields to prevent injection.
+- **Payload Customization**: Dynamic branded subject line (`[Studio Identity] <Project Type> Inquiry: <Name> (<Company>)`), customized sender name (`Studio Identity`), direct client `replyto` mapping, and origin metadata.
 
 ## 📄 License
 
