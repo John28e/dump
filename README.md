@@ -73,6 +73,19 @@ npm run start
 npm run lint
 ```
 
+## 📬 Contact Form
+
+The site includes an interactive contact form embedded inside the Contact pop-up dialog:
+
+- **Serverless Submissions**: Submissions are routed directly from the browser to Web3Forms (`https://api.web3forms.com/submit`) via client-side `fetch()`, requiring no dedicated backend server or API route. Submissions land directly in the owner's inbox.
+- **Environment Configuration**: Configured with the public environment variable `NEXT_PUBLIC_WEB3FORMS_KEY`. Set this key in `.env.local` for local development or in Vercel project environment variables (Production & Preview) for deployed environments. When the key is omitted, the form automatically runs in demo mode with an informational banner without breaking the UI.
+- **Client Protections**: To safeguard the owner's inbox against spam and automated abuse, the client enforces:
+  - **Honeypot Trap**: A hidden `botcheck` input field caught and rejected if populated.
+  - **Submission Duration Check**: Rejects submissions completed in under 3 seconds to deter fast headless scripts.
+  - **Submission Cooldown**: A client-side 60-second cooldown between consecutive submissions.
+  - **Session Limits**: A hard limit of at most 3 submissions per browser session.
+  - **Input Sanitization**: Single-line sanitization on header fields to prevent injection.
+
 ## 📄 License
 
 The code is MIT-licensed (see [LICENSE](LICENSE)). Photos and videos keep their own licenses, as listed in [public/images/CREDITS.md](public/images/CREDITS.md).
