@@ -284,6 +284,8 @@ export async function submitContact(values: ContactFormValues): Promise<ContactS
     subject: subjectLine,
     from_name: "Studio Identity",
     replyto: cleanEmail,
+    reply_to: cleanEmail,
+    autoresponder: "true",
     name: cleanName,
     email: cleanEmail,
     company: cleanCompany || "Not specified",
