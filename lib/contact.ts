@@ -206,10 +206,103 @@ function recordSubmissionSuccess(): void {
 }
 
 /**
+ * Canonical site URL constant used in email payload.
+ */
+export const SITE_URL = "https://studio-identity.vercel.app";
+
+/**
  * Sanitizes header and single-line values to strip newlines and linebreaks.
  */
-function sanitizeSingleLine(str: string): string {
+export function sanitizeSingleLine(str: string): string {
   return str.replace(/[\r\n\t]+/g, " ").trim();
+}
+
+/**
+ * Formats a Date object into the Asia/Kolkata time zone string (e.g. "07 Nov 2026, 17:18 IST").
+ */
+export function formatSentAt(date: Date = new Date()): string {
+  const formatted = new Intl.DateTimeFormat("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "Asia/Kolkata",
+  }).format(date);
+  return `${formatted} IST`;
+}
+
+/**
+ * Normalizes message text:
+ * - Trims leading/trailing whitespace
+ * - Normalizes \r\n and \r to \n
+ * - Collapses 3 or more blank lines into one blank line
+ * - Enforces the 2000-character limit while preserving line breaks
+ */
+export function normalizeMessage(raw: string): string {
+  let normalized = raw.trim().replace(/\r\n|\r/g, "\n");
+  normalized = normalized.replace(/\n(?:[ \t]*\n){3,}/g, "\n\n");
+  if (normalized.length > 2000) {
+    normalized = normalized.slice(0, 2000);
+  }
+  return normalized;
+}
+
+/**
+ * Builds the email subject: "New message from <name> - <project type>",
+ * with newlines stripped and at most 100 characters (truncates name first if needed).
+ */
+export function buildContactSubject(name: string, projectType: string): string {
+  const cleanName = sanitizeSingleLine(name);
+  const cleanProjectType = sanitizeSingleLine(projectType);
+  const prefix = "New message from ";
+  const suffix = ` - ${cleanProjectType}`;
+  const maxLen = 100;
+  const availableForName = Math.max(0, maxLen - prefix.length - suffix.length);
+  const truncatedName = cleanName.length > availableForName ? cleanName.slice(0, availableForName).trim() : cleanName;
+  let subject = `${prefix}${truncatedName}${suffix}`;
+  if (subject.length > maxLen) {
+    subject = subject.slice(0, maxLen);
+  }
+  return sanitizeSingleLine(subject);
+}
+
+/**
+ * Constructs the submission payload matching Web3Forms specifications and clean email layout.
+ */
+export function buildContactPayload(
+  values: ContactFormValues,
+  accessKey: string,
+  now: Date = new Date()
+): Record<string, string> {
+  const cleanName = sanitizeSingleLine(values.name);
+  const cleanEmail = sanitizeSingleLine(values.email);
+  const cleanCompany = sanitizeSingleLine(values.company || "");
+  const cleanProjectType = sanitizeSingleLine(values.project_type);
+  const cleanMsg = normalizeMessage(values.message);
+  const subject = buildContactSubject(cleanName, cleanProjectType);
+
+  const payload: Record<string, string> = {
+    access_key: accessKey,
+    subject: subject,
+    from_name: "identity contact form",
+    replyto: cleanEmail,
+    botcheck: "",
+    Name: cleanName,
+    Email: cleanEmail,
+  };
+
+  if (cleanCompany) {
+    payload["Company"] = cleanCompany;
+  }
+
+  payload["Project type"] = cleanProjectType;
+  payload["Message"] = cleanMsg;
+  payload["Sent from"] = SITE_URL;
+  payload["Sent at"] = formatSentAt(now);
+
+  return payload;
 }
 
 /**
@@ -269,31 +362,7 @@ export async function submitContact(values: ContactFormValues): Promise<ContactS
     };
   }
 
-  const cleanName = sanitizeSingleLine(values.name);
-  const cleanEmail = sanitizeSingleLine(values.email);
-  const cleanCompany = sanitizeSingleLine(values.company || "");
-  const cleanProjectType = sanitizeSingleLine(values.project_type);
-  const cleanMessage = values.message.trim();
-
-  const subjectLine = cleanCompany
-    ? `[Studio Identity] ${cleanProjectType} Inquiry: ${cleanName} (${cleanCompany})`
-    : `[Studio Identity] ${cleanProjectType} Inquiry: ${cleanName}`;
-
-  const payload: Record<string, string> = {
-    access_key: accessKey,
-    subject: subjectLine,
-    from_name: "Studio Identity",
-    replyto: cleanEmail,
-    reply_to: cleanEmail,
-    autoresponder: "true",
-    name: cleanName,
-    email: cleanEmail,
-    company: cleanCompany || "Not specified",
-    project_type: cleanProjectType,
-    message: cleanMessage,
-    site_origin: typeof window !== "undefined" ? window.location.origin : "https://studio-identity.vercel.app",
-    botcheck: "",
-  };
+  const payload = buildContactPayload(values, accessKey);
 
   const controller = new AbortController();
   const timeoutId = setTimeout(() => {
