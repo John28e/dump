@@ -79,13 +79,26 @@ The site includes an interactive contact form embedded inside the Contact pop-up
 
 - **Serverless Submissions**: Submissions are routed directly from the browser to Web3Forms (`https://api.web3forms.com/submit`) via client-side `fetch()`, requiring no dedicated backend server or API route. Submissions land directly in the owner's inbox.
 - **Environment Configuration**: Configured with the public environment variable `NEXT_PUBLIC_WEB3FORMS_KEY`. Set this key in `.env.local` for local development or in Vercel project environment variables (Production & Preview) for deployed environments. When the key is omitted, the form automatically runs in demo mode with an informational banner without breaking the UI.
+- **Email Content & Structure**:
+  - **Subject Line**: `New message from <name> - <project type>` (newlines stripped, max 100 characters, with name truncated first if needed).
+  - **Sender Label**: `identity contact form`.
+  - **Direct Reply-To**: Routed directly to the visitor's email for single-click replies.
+  - **Clean Display Fields (in order)**:
+    1. `Name` — visitor's full name.
+    2. `Email` — visitor's contact email.
+    3. `Company` — company name (omitted entirely from email when empty).
+    4. `Project type` — selected requirement chip (`Brand identity`, `Website`, `Brand and website`, or `Something else`).
+    5. `Message` — multi-line message (normalized line endings, three or more blank lines collapsed to one, 2000-character limit, line breaks preserved).
+    6. `Sent from` — canonical site URL (`https://studio-identity.vercel.app`).
+    7. `Sent at` — timestamp formatted in `Asia/Kolkata` time zone (e.g. `07 Nov 2026, 17:18 IST`).
+- **Template Choice**: Uses Web3Forms' built-in minimal single-column tabular template. This single-column layout provides clear label-to-value hierarchy, a roomy message area, zero extraneous graphics, excellent readability in Gmail and mobile mail apps, and clean rendering across light and dark modes.
 - **Client Protections**: To safeguard the owner's inbox against spam and automated abuse, the client enforces:
-  - **Honeypot Trap**: A hidden `botcheck` input field caught and rejected if populated.
+  - **Honeypot Trap**: A hidden `botcheck` input field caught and rejected if populated, and sent as `botcheck: ""` to the endpoint (never shown in email fields).
   - **Submission Duration Check**: Rejects submissions completed in under 3 seconds to deter fast headless scripts.
   - **Submission Cooldown**: A client-side 60-second cooldown between consecutive submissions.
   - **Session Limits**: A hard limit of at most 3 submissions per browser session.
   - **Input Sanitization**: Single-line sanitization on header fields to prevent injection.
-- **Payload Customization**: Dynamic branded subject line (`[Studio Identity] <Project Type> Inquiry: <Name> (<Company>)`), customized sender name (`Studio Identity`), direct client `replyto` mapping, and origin metadata.
+- **Changing Delivery & Template Options**: See [docs/email-template-setup.md](docs/email-template-setup.md) for full details on field customization, dashboard key management, and Free vs. Pro tier capabilities.
 
 ## 📄 License
 
