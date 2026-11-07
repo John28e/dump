@@ -79,43 +79,43 @@ export const WhatWeDo: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative z-10 w-full bg-white text-black pt-section pb-whatwedo-top select-none overflow-hidden"
+      className="relative z-10 w-full bg-background text-foreground pt-section pb-whatwedo-top select-none overflow-hidden"
     >
       {/* Section Title */}
       <div className="grid-layout mb-whatwedo-top">
-        <h2 className="col-span-5 md:col-start-3 md:col-span-8 text-left text-heading-xl text-black font-bold uppercase tracking-tight">
+        <h2 className="col-span-5 md:col-start-3 md:col-span-8 text-left text-heading-xl text-foreground font-bold uppercase tracking-tight">
           {PLACEHOLDER_DATA.whatWeDo.title}
         </h2>
       </div>
 
       {/* Row 1: Services & Clients (spec section 3: row 1 has 2 boxes w: 50%/50% on desktop/tablet; stacked on mobile) */}
       <div className="grid-layout mb-gap-lg">
-        <div className="relative z-10 col-span-5 md:col-start-3 md:col-span-8 flex flex-col md:flex-row gap-gap-md md:gap-0">
-          {/* Services Box (#fdf7f7) */}
-          <div className="whatwedo-box relative w-full md:w-1/2 bg-whatwedo-service p-whatwedo-box-p flex flex-col justify-between">
+        <div className="relative z-10 col-span-5 md:col-start-3 md:col-span-8 flex flex-col md:flex-row gap-gap-md md:gap-4">
+          {/* Services Box (tumble-deck oklab surface theme) */}
+          <div className="whatwedo-box relative w-full md:w-1/2 rounded-[3px] bg-[color-mix(in_oklab,var(--color-foreground)_4%,var(--color-background))] shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-foreground)_10%,transparent)] p-whatwedo-box-p flex flex-col justify-between transition-colors">
             {/* 4 Corner Dots (data-dot, 0.15s stagger) */}
             <span
               data-dot="true"
-              className="absolute top-0 left-0 w-[4px] h-[4px] bg-black -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute top-0 left-0 w-[4px] h-[4px] bg-foreground -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute top-0 right-0 w-[4px] h-[4px] bg-black translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute top-0 right-0 w-[4px] h-[4px] bg-foreground translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute bottom-0 left-0 w-[4px] h-[4px] bg-black -translate-x-1/2 translate-y-1/2 pointer-events-none"
+              className="absolute bottom-0 left-0 w-[4px] h-[4px] bg-foreground -translate-x-1/2 translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute bottom-0 right-0 w-[4px] h-[4px] bg-black translate-x-1/2 translate-y-1/2 pointer-events-none"
+              className="absolute bottom-0 right-0 w-[4px] h-[4px] bg-foreground translate-x-1/2 translate-y-1/2 pointer-events-none rounded-[1px]"
             />
 
             <div>
-              <p className="text-label text-black font-bold uppercase tracking-wider mb-2">
+              <p className="text-label text-[color-mix(in_oklab,var(--color-foreground)_65%,transparent)] font-mono font-bold uppercase tracking-wider mb-2">
                 01 / SERVICES
               </p>
-              <h3 className="text-heading-lg font-bold uppercase tracking-tight text-black mb-6">
+              <h3 className="text-heading-lg font-bold uppercase tracking-tight text-foreground mb-6">
                 Disciplines
               </h3>
             </div>
@@ -124,7 +124,7 @@ export const WhatWeDo: React.FC = () => {
               {PLACEHOLDER_DATA.whatWeDo.services.map((srv) => (
                 <li
                   key={srv}
-                  className="text-body-md font-bold uppercase tracking-tight text-black border-b border-black/10 pb-1.5 last:border-none"
+                  className="text-body-md font-bold uppercase tracking-tight text-foreground border-b border-[color-mix(in_oklab,var(--color-foreground)_10%,transparent)] pb-1.5 last:border-none"
                 >
                   {srv}
                 </li>
@@ -132,31 +132,31 @@ export const WhatWeDo: React.FC = () => {
             </ul>
           </div>
 
-          {/* Clients Box (#dddddd) */}
-          <div className="whatwedo-box relative w-full md:w-1/2 bg-whatwedo-client p-whatwedo-box-p flex flex-col justify-between">
+          {/* Clients Box (tumble-deck oklab surface theme) */}
+          <div className="whatwedo-box relative w-full md:w-1/2 rounded-[3px] bg-[color-mix(in_oklab,var(--color-foreground)_7%,var(--color-background))] shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-foreground)_10%,transparent)] p-whatwedo-box-p flex flex-col justify-between transition-colors">
             {/* 4 Corner Dots (data-dot, 0.15s stagger) */}
             <span
               data-dot="true"
-              className="absolute top-0 left-0 w-[4px] h-[4px] bg-black -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute top-0 left-0 w-[4px] h-[4px] bg-foreground -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute top-0 right-0 w-[4px] h-[4px] bg-black translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute top-0 right-0 w-[4px] h-[4px] bg-foreground translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute bottom-0 left-0 w-[4px] h-[4px] bg-black -translate-x-1/2 translate-y-1/2 pointer-events-none"
+              className="absolute bottom-0 left-0 w-[4px] h-[4px] bg-foreground -translate-x-1/2 translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute bottom-0 right-0 w-[4px] h-[4px] bg-black translate-x-1/2 translate-y-1/2 pointer-events-none"
+              className="absolute bottom-0 right-0 w-[4px] h-[4px] bg-foreground translate-x-1/2 translate-y-1/2 pointer-events-none rounded-[1px]"
             />
 
             <div>
-              <p className="text-label text-black font-bold uppercase tracking-wider mb-2">
+              <p className="text-label text-[color-mix(in_oklab,var(--color-foreground)_65%,transparent)] font-mono font-bold uppercase tracking-wider mb-2">
                 02 / CLIENTS
               </p>
-              <h3 className="text-heading-lg font-bold uppercase tracking-tight text-black mb-6">
+              <h3 className="text-heading-lg font-bold uppercase tracking-tight text-foreground mb-6">
                 Clients
               </h3>
             </div>
@@ -165,7 +165,7 @@ export const WhatWeDo: React.FC = () => {
               {PLACEHOLDER_DATA.whatWeDo.clients.map((client) => (
                 <span
                   key={client}
-                  className="text-body-sm font-bold uppercase tracking-tight text-black truncate"
+                  className="text-body-sm font-bold uppercase tracking-tight text-foreground truncate"
                 >
                   {client}
                 </span>
@@ -175,38 +175,38 @@ export const WhatWeDo: React.FC = () => {
         </div>
       </div>
 
-      {/* Row 2: Sectors Box (#cacaca, 1 box 100% w) */}
+      {/* Row 2: Sectors Box (tumble-deck oklab surface theme) */}
       <div className="grid-layout">
         <div className="col-span-5 md:col-start-3 md:col-span-8">
-          <div className="whatwedo-box relative w-full bg-whatwedo-sector p-whatwedo-box-p flex flex-col justify-between">
+          <div className="whatwedo-box relative w-full rounded-[3px] bg-[color-mix(in_oklab,var(--color-foreground)_10%,var(--color-background))] shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-foreground)_10%,transparent)] p-whatwedo-box-p flex flex-col justify-between transition-colors">
             {/* 4 Corner Dots (data-dot, 0.15s stagger) */}
             <span
               data-dot="true"
-              className="absolute top-0 left-0 w-[4px] h-[4px] bg-black -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute top-0 left-0 w-[4px] h-[4px] bg-foreground -translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute top-0 right-0 w-[4px] h-[4px] bg-black translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute top-0 right-0 w-[4px] h-[4px] bg-foreground translate-x-1/2 -translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute bottom-0 left-0 w-[4px] h-[4px] bg-black -translate-x-1/2 translate-y-1/2 pointer-events-none"
+              className="absolute bottom-0 left-0 w-[4px] h-[4px] bg-foreground -translate-x-1/2 translate-y-1/2 pointer-events-none rounded-[1px]"
             />
             <span
               data-dot="true"
-              className="absolute bottom-0 right-0 w-[4px] h-[4px] bg-black translate-x-1/2 translate-y-1/2 pointer-events-none"
+              className="absolute bottom-0 right-0 w-[4px] h-[4px] bg-foreground translate-x-1/2 translate-y-1/2 pointer-events-none rounded-[1px]"
             />
 
             <div className="mb-4">
-              <p className="text-label text-black font-bold uppercase tracking-wider mb-2">
+              <p className="text-label text-[color-mix(in_oklab,var(--color-foreground)_65%,transparent)] font-mono font-bold uppercase tracking-wider mb-2">
                 03 / SECTORS
               </p>
-              <h3 className="text-heading-lg font-bold uppercase tracking-tight text-black mb-4">
+              <h3 className="text-heading-lg font-bold uppercase tracking-tight text-foreground mb-4">
                 Industries
               </h3>
             </div>
 
-            <p className="text-body-md text-black leading-relaxed font-medium uppercase tracking-tight">
+            <p className="text-body-md text-foreground leading-relaxed font-medium uppercase tracking-tight">
               {PLACEHOLDER_DATA.whatWeDo.sectors}
             </p>
           </div>
