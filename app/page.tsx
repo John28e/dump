@@ -11,7 +11,7 @@ import { WorkGrid } from "@/components/WorkGrid";
 import { ViewToggle } from "@/components/ViewToggle";
 import { ProjectListView } from "@/components/ProjectListView";
 import { AboutStatement } from "@/components/AboutStatement";
-import { BehindTheScenes } from "@/components/BehindTheScenes";
+import { HowWeWork } from "@/components/HowWeWork";
 import { WhatWeDo } from "@/components/WhatWeDo";
 import { WorldwideSection } from "@/components/WorldwideSection";
 import { ContactModal } from "@/components/ContactModal";
@@ -69,8 +69,8 @@ export default function Home() {
         {/* About Statement (#about overline + justified statement) */}
         <AboutStatement />
 
-        {/* Behind the Scenes Carousel (Embla dragFree loop, progress bar, 3D flip on desktop) */}
-        <BehindTheScenes />
+        {/* How We Work Curved Row (replaces Behind the Scenes carousel) */}
+        <HowWeWork />
 
         {/* What We Do (3 boxes: Services, Clients, Sectors, corner dots, scrubbed rotate -6 to 0) */}
         <WhatWeDo />

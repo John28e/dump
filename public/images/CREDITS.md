@@ -57,4 +57,4 @@ All photographs and video clips used in `identity` are authentic, high-resolutio
 
 ## Video Clips Note
 
-All 20 hover video clips (`public/media/work/` and `public/media/bts/`) are encoded in H.264 MP4 without audio at 24fps, matching the exact composition of each respective poster image. Work clips are optimized under 2MB each and Behind the Scenes clips under 1.2MB each, with total video weight under 10MB.
+All 8 hover video clips (`public/media/work/`) are encoded in H.264 MP4 without audio at 24fps, matching the exact composition of each respective poster image. Work clips are optimized under 2MB each, with total video weight under 10MB.
